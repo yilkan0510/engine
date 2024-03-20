@@ -3,3 +3,7 @@
 //
 
 #include "DrieDfiguur.h"
+
+Face::Face(const std::vector<int> &pointIndexes) : point_indexes(pointIndexes) {}
+
+Face::Face() {}

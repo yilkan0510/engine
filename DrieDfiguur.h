@@ -13,6 +13,11 @@
 class Face {
 public:
     std::vector<int> point_indexes;
+
+    Face();
+
+    explicit Face(const std::vector<int> &pointIndexes);
+
 public:
 };
 

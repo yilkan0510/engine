@@ -18,9 +18,13 @@
 #include <cmath>
 #include <iostream>
 #include <stack>
+#include "FigureMaker3D.h"
 
 img::EasyImage generate_image(const ini::Configuration &configuration) {
     // Parse general settings
+
+
+
     int size = configuration["General"]["size"].as_int_or_die();
     auto background_color = configuration["General"]["backgroundcolor"].as_double_tuple_or_die();
 
@@ -30,27 +34,48 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
     for (int i = 0; i < nrFigures; i++) {
         std::string figureKey = "Figure" + std::to_string(i);
         Figure fig;
+
+        //TEMP
+        std::string type = configuration[figureKey]["type"].as_string_or_die();
+        if("3DLSystem" == type){
+            return img::EasyImage(500,500);
+        }
+
         double scale = configuration[figureKey]["scale"].as_double_or_die();
         auto rotateX = configuration[figureKey]["rotateX"].as_double_or_die();
         auto rotateY = configuration[figureKey]["rotateY"].as_double_or_die();
         auto rotateZ = configuration[figureKey]["rotateZ"].as_double_or_die();
         auto center = configuration[figureKey]["center"].as_double_tuple_or_die();
         auto color = configuration[figureKey]["color"].as_double_tuple_or_die();
-        fig.color = color;
 
-        int nrPoints = configuration[figureKey]["nrPoints"].as_int_or_die();
-        for (int j = 0; j < nrPoints; j++) {
-            auto point = configuration[figureKey]["point" + std::to_string(j)].as_double_tuple_or_die();
-            fig.points.push_back(Vector3D::point(point[0], point[1], point[2]));
+
+//        int nrPoints = configuration[figureKey]["nrPoints"].as_int_or_die();
+//        for (int j = 0; j < nrPoints; j++) {
+//            auto point = configuration[figureKey]["point" + std::to_string(j)].as_double_tuple_or_die();
+//            fig.points.push_back(Vector3D::point(point[0], point[1], point[2]));
+//        }
+//        int nrLines = configuration[figureKey]["nrLines"].as_int_or_die();
+//        for (int j = 0; j < nrLines; j++) {
+//            auto line = configuration[figureKey]["line" + std::to_string(j)].as_int_tuple_or_die();
+//            Face face;
+//            face.point_indexes.push_back(line[0]);
+//            face.point_indexes.push_back(line[1]);
+//            fig.faces.push_back(face);
+//        }
+
+        FigureMaker3D figureMaker3D;
+        if ("Tetrahedron" == type) {
+            fig = figureMaker3D.createTetrahedron();
+        } else if ("Sphere" == type) {
+            fig = figureMaker3D.createSphere(3);
+        } else if ("Cone" == type) {
+            fig = figureMaker3D.createCone(10, 10);
+        } else if ("Cylinder" == type) {
+            fig = figureMaker3D.createCylinder(10, 10);
+        } else if ("Torus" == type) {
+            fig = figureMaker3D.createTorus(1, 2, 10, 10);
         }
-        int nrLines = configuration[figureKey]["nrLines"].as_int_or_die();
-        for (int j = 0; j < nrLines; j++) {
-            auto line = configuration[figureKey]["line" + std::to_string(j)].as_int_tuple_or_die();
-            Face face;
-            face.point_indexes.push_back(line[0]);
-            face.point_indexes.push_back(line[1]);
-            fig.faces.push_back(face);
-        }
+        fig.color = color;
 
         Transformaties trans;
         Matrix scaleMatrix = trans.scaleFigure(scale);

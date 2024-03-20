@@ -22,12 +22,10 @@ set(engine_sources
         vector3d.cc
         DrieDfiguur.cpp
         Transformaties.cpp
-        Transformaties.h
         Eye_point_transformaties.cpp
-        Eye_point_transformaties.h
         Perspectiefprojectie.cpp
-        Perspectiefprojectie.h
         drawlines.cpp
+        FigureMaker3D.cpp
 )
 
 ############################################################
