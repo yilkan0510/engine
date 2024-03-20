@@ -1,0 +1,13 @@
+# ninja log v5
+1	124	7326547503616504	build.ninja	3eaaa7ab6f2ff39e
+9	269	7326476987900893	CMakeFiles/engine.dir/DrieDfiguur.cpp.obj	7db3f400ee930d42
+1	492	7314340038376999	CMakeFiles/engine.dir/easy_image.cc.obj	ad9564c0b63307ff
+3	298	7326522673494531	CMakeFiles/engine.dir/drawlines.cpp.obj	9bf1fb4bff5bff60
+14	307	7326476988288818	CMakeFiles/engine.dir/Transformaties.cpp.obj	d80df780dad8bd3
+5	808	7314340041534735	CMakeFiles/engine.dir/l_parser.cc.obj	8186e95563adf7d6
+17	1130	7314340044736421	CMakeFiles/engine.dir/ini_configuration.cc.obj	499593b2bf8d4c64
+19	308	7326476988298983	CMakeFiles/engine.dir/Eye_point_transformaties.cpp.obj	43f820afe68cb289
+25	374	7326476988960738	CMakeFiles/engine.dir/Perspectiefprojectie.cpp.obj	45fa4430b96a573f
+10	523	7315189140992324	CMakeFiles/engine.dir/vector3d.cc.obj	a1f9aaa01ac6cee9
+3	541	7326477061533294	CMakeFiles/engine.dir/engine.cc.obj	6f9015687b83cbdc
+298	625	7326522676710220	engine.exe	8b4043929934fc20
