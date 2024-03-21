@@ -11,9 +11,11 @@
 Vector3D calculateMidpoint(const Vector3D& start, const Vector3D& end) {
     return (start + end) * 0.5; // This directly uses the formula without normalization
 }
-
 Figure divideInTriangles(Figure &fig) {
     Figure newFig;
+
+    // Copy the existing points to the new figure
+    newFig.points = fig.points;
 
     for (const Face &face : fig.faces) {
         // Get the indices of the vertices of the face
@@ -22,23 +24,18 @@ Figure divideInTriangles(Figure &fig) {
         int c = face.point_indexes[2];
 
         // Calculate the midpoints for each edge
-        Vector3D d = calculateMidpoint(fig.points[a], fig.points[b]);
-        Vector3D e = calculateMidpoint(fig.points[a], fig.points[c]);
-        Vector3D f = calculateMidpoint(fig.points[b], fig.points[c]);
+        Vector3D d = calculateMidpoint(newFig.points[a], newFig.points[b]);
+        Vector3D e = calculateMidpoint(newFig.points[a], newFig.points[c]);
+        Vector3D f = calculateMidpoint(newFig.points[b], newFig.points[c]);
 
-        // Normalize the midpoints
-        d.normalise();
-        e.normalise();
-        f.normalise();
+        // Add the midpoints to the new figure's points vector
+        newFig.points.push_back(d);
+        newFig.points.push_back(e);
+        newFig.points.push_back(f);
 
-        // Add the midpoints to the figure's points vector
-        int dIndex = fig.points.size();
-        int eIndex = fig.points.size() + 1;
-        int fIndex = fig.points.size() + 2;
-
-        fig.points.push_back(d);
-        fig.points.push_back(e);
-        fig.points.push_back(f);
+        int dIndex = newFig.points.size() - 3;
+        int eIndex = newFig.points.size() - 2;
+        int fIndex = newFig.points.size() - 1;
 
         // Create the four new faces using the original points and the new midpoints
         newFig.faces.push_back(Face({a, dIndex, eIndex}));
@@ -47,14 +44,10 @@ Figure divideInTriangles(Figure &fig) {
         newFig.faces.push_back(Face({dIndex, fIndex, eIndex}));
     }
 
-    // Update the points of the new figure
-    newFig.points = fig.points;
-
     return newFig;
 }
 
-
-Figure createIcosahedron() {
+Figure FigureMaker3D::createIcosahedron() {
     Figure icosahedron;
     icosahedron.points.push_back(Vector3D::point(0, 0, sqrt(5) / 2));
     for (int i = 2; i < 7; ++i) {
@@ -65,26 +58,26 @@ Figure createIcosahedron() {
     }
     icosahedron.points.push_back(Vector3D::point(0, 0, -sqrt(5) / 2));
 
-    icosahedron.faces.push_back(Face(std::vector<int>{1, 2, 3}));
-    icosahedron.faces.push_back(Face(std::vector<int>{12, 7, 11}));
-    icosahedron.faces.push_back(Face(std::vector<int>{12, 11, 10}));
-    icosahedron.faces.push_back(Face(std::vector<int>{12, 10, 9}));
-    icosahedron.faces.push_back(Face(std::vector<int>{12, 9, 8}));
-    icosahedron.faces.push_back(Face(std::vector<int>{12, 8, 7}));
-    icosahedron.faces.push_back(Face(std::vector<int>{2, 11, 7}));
-    icosahedron.faces.push_back(Face(std::vector<int>{6, 11, 2}));
-    icosahedron.faces.push_back(Face(std::vector<int>{6, 10, 11}));
-    icosahedron.faces.push_back(Face(std::vector<int>{5, 10, 6}));
+    icosahedron.faces.push_back(Face(std::vector<int>{0, 1, 2}));
+    icosahedron.faces.push_back(Face(std::vector<int>{11, 6, 10}));
+    icosahedron.faces.push_back(Face(std::vector<int>{11, 10, 9}));
+    icosahedron.faces.push_back(Face(std::vector<int>{11, 9, 8}));
+    icosahedron.faces.push_back(Face(std::vector<int>{11, 8, 7}));
+    icosahedron.faces.push_back(Face(std::vector<int>{11, 7, 6}));
+    icosahedron.faces.push_back(Face(std::vector<int>{1, 10, 6}));
+    icosahedron.faces.push_back(Face(std::vector<int>{5, 10, 1}));
     icosahedron.faces.push_back(Face(std::vector<int>{5, 9, 10}));
     icosahedron.faces.push_back(Face(std::vector<int>{4, 9, 5}));
     icosahedron.faces.push_back(Face(std::vector<int>{4, 8, 9}));
     icosahedron.faces.push_back(Face(std::vector<int>{3, 8, 4}));
     icosahedron.faces.push_back(Face(std::vector<int>{3, 7, 8}));
     icosahedron.faces.push_back(Face(std::vector<int>{2, 7, 3}));
+    icosahedron.faces.push_back(Face(std::vector<int>{2, 6, 7}));
     icosahedron.faces.push_back(Face(std::vector<int>{1, 6, 2}));
-    icosahedron.faces.push_back(Face(std::vector<int>{1, 5, 6}));
-    icosahedron.faces.push_back(Face(std::vector<int>{1, 4, 5}));
-    icosahedron.faces.push_back(Face(std::vector<int>{1, 3, 4}));
+    icosahedron.faces.push_back(Face(std::vector<int>{0, 5, 1}));
+    icosahedron.faces.push_back(Face(std::vector<int>{0, 4, 5}));
+    icosahedron.faces.push_back(Face(std::vector<int>{0, 3, 4}));
+    icosahedron.faces.push_back(Face(std::vector<int>{0, 2, 3}));
     return icosahedron;
 }
 
@@ -95,10 +88,10 @@ Figure FigureMaker3D::createTetrahedron() {
     fig.points.push_back(Vector3D::point(1, 1, 1));
     fig.points.push_back(Vector3D::point(-1, -1, 1));
 
-    fig.faces.push_back(Face(std::vector<int>{1, 2, 3}));
-    fig.faces.push_back(Face(std::vector<int>{1, 3, 4}));
-    fig.faces.push_back(Face(std::vector<int>{1, 4, 2}));
-    fig.faces.push_back(Face(std::vector<int>{2, 4, 3}));
+    fig.faces.push_back(Face(std::vector<int>{0, 1, 2}));
+    fig.faces.push_back(Face(std::vector<int>{0, 2, 4}));
+    fig.faces.push_back(Face(std::vector<int>{0, 3, 1}));
+    fig.faces.push_back(Face(std::vector<int>{1, 3, 2}));
     return fig;
 }
 
@@ -107,6 +100,9 @@ Figure FigureMaker3D::createSphere(const int n) {
 
     for (int i = 0; i < n; ++i) {
         sphere = divideInTriangles(sphere);
+    }
+    for (auto& points : sphere.points) {
+        points.normalise();
     }
     return sphere;
 }

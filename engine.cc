@@ -66,8 +66,11 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
         FigureMaker3D figureMaker3D;
         if ("Tetrahedron" == type) {
             fig = figureMaker3D.createTetrahedron();
+        } else if ("Icosahedron" == type) {
+            fig = figureMaker3D.createIcosahedron();
         } else if ("Sphere" == type) {
-            fig = figureMaker3D.createSphere(3);
+            auto divideAmount = configuration[figureKey]["n"].as_int_or_die();
+            fig = figureMaker3D.createSphere(divideAmount);
         } else if ("Cone" == type) {
             fig = figureMaker3D.createCone(10, 10);
         } else if ("Cylinder" == type) {

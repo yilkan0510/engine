@@ -25,6 +25,11 @@ public:
 class Figure {
 public:
     std::vector<Vector3D> points;
+
+    Figure(const std::vector<Vector3D> &points, const std::vector<Face> &faces);
+
+    Figure();
+
     std::vector<Face> faces;
     std::vector<double> color;
 };

@@ -11,6 +11,8 @@ class FigureMaker3D {
 public:
     Figure createTetrahedron();
 
+    Figure createIcosahedron();
+
     Figure createSphere(const int n);
 
     Figure createCone(const int n, const double h);
