@@ -66,17 +66,32 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
         FigureMaker3D figureMaker3D;
         if ("Tetrahedron" == type) {
             fig = figureMaker3D.createTetrahedron();
+        } else if ("Octahedron" == type) {
+            fig = figureMaker3D.createOctahedron();
+        } else if ("Dodecahedron" == type) {
+            fig = figureMaker3D.createDodecahedron();
+        } else if ("Cube" == type) {
+            fig = figureMaker3D.createCube();
         } else if ("Icosahedron" == type) {
             fig = figureMaker3D.createIcosahedron();
         } else if ("Sphere" == type) {
             auto divideAmount = configuration[figureKey]["n"].as_int_or_die();
             fig = figureMaker3D.createSphere(divideAmount);
         } else if ("Cone" == type) {
-            fig = figureMaker3D.createCone(10, 10);
+            auto n = configuration[figureKey]["n"].as_int_or_die();
+            auto h = configuration[figureKey]["height"].as_double_or_die();
+            fig = figureMaker3D.createCone(n, h);
         } else if ("Cylinder" == type) {
-            fig = figureMaker3D.createCylinder(10, 10);
+            auto n = configuration[figureKey]["n"].as_int_or_die();
+            auto h = configuration[figureKey]["height"].as_double_or_die();
+            fig = figureMaker3D.createCylinder(n, h);
         } else if ("Torus" == type) {
-            fig = figureMaker3D.createTorus(1, 2, 10, 10);
+            auto r = configuration[figureKey]["r"].as_double_or_die();
+            auto R = configuration[figureKey]["R"].as_double_or_die();
+            auto n = configuration[figureKey]["n"].as_int_or_die();
+            auto m = configuration[figureKey]["m"].as_int_or_die();
+
+            fig = figureMaker3D.createTorus(r, R, n, m);
         }
         fig.color = color;
 

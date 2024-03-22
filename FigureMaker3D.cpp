@@ -11,6 +11,22 @@
 Vector3D calculateMidpoint(const Vector3D& start, const Vector3D& end) {
     return (start + end) * 0.5; // This directly uses the formula without normalization
 }
+
+std::vector<Vector3D> calculateMiddleTriangle(Figure &icosahedron) {
+    std::vector<Vector3D> midpoints;
+
+    for (const Face &face : icosahedron.faces) {
+        Vector3D midpoint = Vector3D::point(0, 0, 0);
+        for (int index : face.point_indexes) {
+            midpoint = midpoint + icosahedron.points[index];
+        }
+        midpoint = midpoint / 3;
+        midpoints.push_back(midpoint);
+    }
+    return midpoints;
+}
+
+
 Figure divideInTriangles(Figure &fig) {
     Figure newFig;
 
@@ -59,39 +75,41 @@ Figure FigureMaker3D::createIcosahedron() {
     icosahedron.points.push_back(Vector3D::point(0, 0, -sqrt(5) / 2));
 
     icosahedron.faces.push_back(Face(std::vector<int>{0, 1, 2}));
-    icosahedron.faces.push_back(Face(std::vector<int>{11, 6, 10}));
-    icosahedron.faces.push_back(Face(std::vector<int>{11, 10, 9}));
-    icosahedron.faces.push_back(Face(std::vector<int>{11, 9, 8}));
-    icosahedron.faces.push_back(Face(std::vector<int>{11, 8, 7}));
-    icosahedron.faces.push_back(Face(std::vector<int>{11, 7, 6}));
-    icosahedron.faces.push_back(Face(std::vector<int>{1, 10, 6}));
-    icosahedron.faces.push_back(Face(std::vector<int>{5, 10, 1}));
-    icosahedron.faces.push_back(Face(std::vector<int>{5, 9, 10}));
-    icosahedron.faces.push_back(Face(std::vector<int>{4, 9, 5}));
-    icosahedron.faces.push_back(Face(std::vector<int>{4, 8, 9}));
-    icosahedron.faces.push_back(Face(std::vector<int>{3, 8, 4}));
-    icosahedron.faces.push_back(Face(std::vector<int>{3, 7, 8}));
-    icosahedron.faces.push_back(Face(std::vector<int>{2, 7, 3}));
-    icosahedron.faces.push_back(Face(std::vector<int>{2, 6, 7}));
-    icosahedron.faces.push_back(Face(std::vector<int>{1, 6, 2}));
-    icosahedron.faces.push_back(Face(std::vector<int>{0, 5, 1}));
-    icosahedron.faces.push_back(Face(std::vector<int>{0, 4, 5}));
-    icosahedron.faces.push_back(Face(std::vector<int>{0, 3, 4}));
     icosahedron.faces.push_back(Face(std::vector<int>{0, 2, 3}));
+    icosahedron.faces.push_back(Face(std::vector<int>{0, 3, 4}));
+    icosahedron.faces.push_back(Face(std::vector<int>{0, 4, 5}));
+    icosahedron.faces.push_back(Face(std::vector<int>{0, 5, 1}));
+    icosahedron.faces.push_back(Face(std::vector<int>{1, 6, 2}));
+    icosahedron.faces.push_back(Face(std::vector<int>{2, 6, 7}));
+    icosahedron.faces.push_back(Face(std::vector<int>{2, 7, 3}));
+    icosahedron.faces.push_back(Face(std::vector<int>{3, 7, 8}));
+    icosahedron.faces.push_back(Face(std::vector<int>{3, 8, 4}));
+    icosahedron.faces.push_back(Face(std::vector<int>{4, 8, 9}));
+    icosahedron.faces.push_back(Face(std::vector<int>{4, 9, 5}));
+    icosahedron.faces.push_back(Face(std::vector<int>{5, 9, 10}));
+    icosahedron.faces.push_back(Face(std::vector<int>{5, 10, 1}));
+    icosahedron.faces.push_back(Face(std::vector<int>{1, 10, 6}));
+    icosahedron.faces.push_back(Face(std::vector<int>{11, 7, 6}));
+    icosahedron.faces.push_back(Face(std::vector<int>{11, 8, 7}));
+    icosahedron.faces.push_back(Face(std::vector<int>{11, 9, 8}));
+    icosahedron.faces.push_back(Face(std::vector<int>{11, 10, 9}));
+    icosahedron.faces.push_back(Face(std::vector<int>{11, 6, 10}));
     return icosahedron;
 }
 
 Figure FigureMaker3D::createTetrahedron() {
     Figure fig;
+
     fig.points.push_back(Vector3D::point(1, -1, -1));
-    fig.points.push_back(Vector3D::point(-1, 1, 1));
+    fig.points.push_back(Vector3D::point(-1, 1 , -1));
     fig.points.push_back(Vector3D::point(1, 1, 1));
     fig.points.push_back(Vector3D::point(-1, -1, 1));
 
     fig.faces.push_back(Face(std::vector<int>{0, 1, 2}));
-    fig.faces.push_back(Face(std::vector<int>{0, 2, 4}));
-    fig.faces.push_back(Face(std::vector<int>{0, 3, 1}));
     fig.faces.push_back(Face(std::vector<int>{1, 3, 2}));
+    fig.faces.push_back(Face(std::vector<int>{0, 3, 1}));
+    fig.faces.push_back(Face(std::vector<int>{0, 2, 3}));
+
     return fig;
 }
 
@@ -108,15 +126,184 @@ Figure FigureMaker3D::createSphere(const int n) {
 }
 
 Figure FigureMaker3D::createCone(const int n, const double h) {
-    return Figure();
+    Figure cone;
+
+    // Add the tip of the cone
+    cone.points.push_back(Vector3D::point(0, 0, h));
+
+    // Generate the base circle points
+    for (int i = 0; i < n; ++i) {
+        double angle = 2 * M_PI * i / n;
+        cone.points.push_back(Vector3D::point(cos(angle), sin(angle), 0));
+    }
+
+    // Create the side faces
+    for (int i = 1; i <= n; ++i) {
+        int nextIndex = (i % n) + 1; // To loop back to the first point after the last
+        cone.faces.push_back(Face({0, i, nextIndex}));
+    }
+
+    // Create the base face
+    std::vector<int> baseFaceIndices;
+    for (int i = 1; i <= n; ++i) {
+        baseFaceIndices.push_back(i);
+    }
+    cone.faces.push_back(Face(baseFaceIndices));
+
+    return cone;
 }
+
 
 Figure FigureMaker3D::createCylinder(const int n, const double h) {
-    return Figure();
+    Figure cylinder;
+
+    // Generate the base circle points in the XY plane
+    for (int i = 0; i < n; ++i) {
+        double angle = 2 * M_PI * i / n;
+        cylinder.points.push_back(Vector3D::point(cos(angle), sin(angle), 0));
+    }
+
+    // Generate the top circle points in the XY plane, but at height h
+    for (int i = 0; i < n; ++i) {
+        double angle = 2 * M_PI * i / n;
+        cylinder.points.push_back(Vector3D::point(cos(angle), sin(angle), h));
+    }
+
+    // Create the side faces
+    for (int i = 0; i < n; ++i) {
+        int nextIndex = (i + 1) % n;
+        // Create two triangles for each side face
+        cylinder.faces.push_back(Face({ nextIndex, n + nextIndex}));
+        cylinder.faces.push_back(Face({n + nextIndex, n + i}));
+    }
+
+    // Create the base face
+    std::vector<int> baseFaceIndices;
+    for (int i = 0; i < n; ++i) {
+        baseFaceIndices.push_back(i);
+    }
+    cylinder.faces.push_back(Face(baseFaceIndices));
+
+    // Create the top face
+    std::vector<int> topFaceIndices;
+    for (int i = 0; i < n; ++i) {
+        topFaceIndices.push_back(n + i);
+    }
+    cylinder.faces.push_back(Face(topFaceIndices));
+
+    return cylinder;
 }
 
+
 Figure FigureMaker3D::createTorus(const double r, const double R, const int n, const int m) {
-    return Figure();
+    Figure torus;
+
+    // Generate the points
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            double u = (2 * M_PI * i) / n;
+            double v = (2 * M_PI * j) / m;
+            double x = (R + r * cos(v)) * cos(u);
+            double y = (R + r * cos(v)) * sin(u);
+            double z = r * sin(v);
+            torus.points.push_back(Vector3D::point(x, y, z));
+        }
+    }
+
+    // Generate the faces
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            int nextI = (i + 1) % n;
+            int nextJ = (j + 1) % m;
+            // Each face is a quad made of two triangles
+            int p1 = i * m + j;
+            int p2 = nextI * m + j;
+            int p3 = nextI * m + nextJ;
+            int p4 = i * m + nextJ;
+
+            // First triangle of the quad
+            torus.faces.push_back(Face({ p2, p3}));
+            // Second triangle of the qu
+            torus.faces.push_back(Face({ p3, p4}));
+        }
+    }
+
+    return torus;
 }
+
+Figure FigureMaker3D::createCube() {
+    Figure cube;
+
+    // Generate the points
+    cube.points.push_back(Vector3D::point(1, -1, -1));
+    cube.points.push_back(Vector3D::point(-1, 1, -1));
+    cube.points.push_back(Vector3D::point(1, 1, 1));
+    cube.points.push_back(Vector3D::point(-1, -1, 1));
+    cube.points.push_back(Vector3D::point(1, 1, -1));
+    cube.points.push_back(Vector3D::point(-1, -1, -1));
+    cube.points.push_back(Vector3D::point(1, -1, 1));
+    cube.points.push_back(Vector3D::point(-1, 1, 1));
+
+    cube.faces.push_back(Face(std::vector<int>{0, 4, 2, 6}));
+    cube.faces.push_back(Face(std::vector<int>{4, 1, 7, 2}));
+    cube.faces.push_back(Face(std::vector<int>{1, 5, 3, 7}));
+    cube.faces.push_back(Face(std::vector<int>{5, 0, 6, 3}));
+    cube.faces.push_back(Face(std::vector<int>{6, 2, 7, 3}));
+    cube.faces.push_back(Face(std::vector<int>{0, 5, 1, 4}));
+
+
+
+
+    return cube;
+}
+
+Figure FigureMaker3D::createOctahedron() {
+    Figure octahedron;
+
+    octahedron.points.push_back(Vector3D::point(1, 0, 0));
+    octahedron.points.push_back(Vector3D::point(0, 1, 0));
+    octahedron.points.push_back(Vector3D::point(-1, 0, 0));
+    octahedron.points.push_back(Vector3D::point(0, -1, 0));
+    octahedron.points.push_back(Vector3D::point(0, 0, -1));
+    octahedron.points.push_back(Vector3D::point(0, 0, 1));
+
+    octahedron.faces.push_back(Face(std::vector<int>{0, 1, 5}));
+    octahedron.faces.push_back(Face(std::vector<int>{1, 2, 5}));
+    octahedron.faces.push_back(Face(std::vector<int>{2, 3, 5}));
+    octahedron.faces.push_back(Face(std::vector<int>{3, 0, 5}));
+    octahedron.faces.push_back(Face(std::vector<int>{1, 0, 4}));
+    octahedron.faces.push_back(Face(std::vector<int>{2, 1, 4}));
+    octahedron.faces.push_back(Face(std::vector<int>{3, 2, 4}));
+    octahedron.faces.push_back(Face(std::vector<int>{0, 3, 4}));
+
+    return octahedron;
+}
+
+Figure FigureMaker3D::createDodecahedron() {
+    Figure dodecahedron;
+    Figure icosahedron = createIcosahedron();
+    std::vector<Vector3D> midpoints = calculateMiddleTriangle(icosahedron);
+
+    for (const Vector3D &point : midpoints) {
+        dodecahedron.points.push_back(point);
+    }
+
+    dodecahedron.faces.push_back(Face({ 0,  1,  2,  3,  4}));
+    dodecahedron.faces.push_back(Face({ 0,  5,  6,  7,  1}));
+    dodecahedron.faces.push_back(Face({ 1,  7,  8,  9,  2}));
+    dodecahedron.faces.push_back(Face({ 2,  9, 10, 11,  3}));
+    dodecahedron.faces.push_back(Face({ 3, 11, 12, 13,  4}));
+    dodecahedron.faces.push_back(Face({ 4, 13, 14,  5,  0}));
+    dodecahedron.faces.push_back(Face({19, 18, 17, 16, 15}));
+    dodecahedron.faces.push_back(Face({19, 14, 13, 12, 18}));
+    dodecahedron.faces.push_back(Face({18, 12, 11, 10, 17}));
+    dodecahedron.faces.push_back(Face({17, 10,  9,  8, 16}));
+    dodecahedron.faces.push_back(Face({16,  8,  7,  6, 15}));
+    dodecahedron.faces.push_back(Face({15,  6,  5, 14, 19}));
+
+    return dodecahedron;
+}
+
+
 
 

@@ -21,6 +21,12 @@ public:
 
     Figure createTorus(const double r, const double R, const int n, const int m);
 
+    Figure createCube();
+
+    Figure createOctahedron();
+
+    Figure createDodecahedron();
+
 };
 
 
