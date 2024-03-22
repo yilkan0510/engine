@@ -245,6 +245,30 @@ FigureMaker3D.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/FigureMaker3D.cpp.s
 .PHONY : FigureMaker3D.cpp.s
 
+LSystem3DGenerator.obj: LSystem3DGenerator.cpp.obj
+.PHONY : LSystem3DGenerator.obj
+
+# target to build an object file
+LSystem3DGenerator.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/LSystem3DGenerator.cpp.obj
+.PHONY : LSystem3DGenerator.cpp.obj
+
+LSystem3DGenerator.i: LSystem3DGenerator.cpp.i
+.PHONY : LSystem3DGenerator.i
+
+# target to preprocess a source file
+LSystem3DGenerator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/LSystem3DGenerator.cpp.i
+.PHONY : LSystem3DGenerator.cpp.i
+
+LSystem3DGenerator.s: LSystem3DGenerator.cpp.s
+.PHONY : LSystem3DGenerator.s
+
+# target to generate assembly for a file
+LSystem3DGenerator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/LSystem3DGenerator.cpp.s
+.PHONY : LSystem3DGenerator.cpp.s
+
 Perspectiefprojectie.obj: Perspectiefprojectie.cpp.obj
 .PHONY : Perspectiefprojectie.obj
 
@@ -459,6 +483,9 @@ help:
 	@echo ... FigureMaker3D.obj
 	@echo ... FigureMaker3D.i
 	@echo ... FigureMaker3D.s
+	@echo ... LSystem3DGenerator.obj
+	@echo ... LSystem3DGenerator.i
+	@echo ... LSystem3DGenerator.s
 	@echo ... Perspectiefprojectie.obj
 	@echo ... Perspectiefprojectie.i
 	@echo ... Perspectiefprojectie.s

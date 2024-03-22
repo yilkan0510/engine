@@ -140,6 +140,12 @@
 		<Unit filename="C:/Users/yilka/Documents/semester/CG/FigureMaker3D.h">
 			<Option target="engine"/>
 		</Unit>
+		<Unit filename="C:/Users/yilka/Documents/semester/CG/LSystem3DGenerator.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="C:/Users/yilka/Documents/semester/CG/LSystem3DGenerator.h">
+			<Option target="engine"/>
+		</Unit>
 		<Unit filename="C:/Users/yilka/Documents/semester/CG/Perspectiefprojectie.cpp">
 			<Option target="engine"/>
 		</Unit>

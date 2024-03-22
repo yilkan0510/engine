@@ -19,6 +19,77 @@
 #include <iostream>
 #include <stack>
 #include "FigureMaker3D.h"
+std::string ProcessString(const LParser::LSystem2D &l_system, const std::string &input) {
+    std::string new_result = "";
+    for (char c : input) {
+        if (l_system.get_alphabet().find(c) != l_system.get_alphabet().end()) {
+            new_result += l_system.get_replacement(c);
+        } else {
+            new_result += c;
+        }
+    }
+    return new_result;
+}
+
+std::string BuildString(LParser::LSystem2D &l_system, unsigned int iterations) {
+    std::string result = l_system.get_initiator();
+    for (unsigned int i = 0; i < iterations; i++) {
+        result = ProcessString(l_system, result);
+    }
+    return result;
+}
+
+
+void EditLines2D(Lines2D &lines, LParser::LSystem2D &l_system, const std::vector<double> &color) {
+    Color colorl(color[0], color[1], color[2]);
+
+    std::string initiator = l_system.get_initiator();
+    double angle = l_system.get_angle();
+    double startingAngle = l_system.get_starting_angle();
+    unsigned int iterations = l_system.get_nr_iterations();
+    std::set<char> alphabet = l_system.get_alphabet();
+
+    std::string result = BuildString(l_system, iterations);
+
+    double x0 = 0;
+    double y0 = 0;
+    double angleRad = startingAngle * M_PI / 180;
+
+    // Stack to save and restore the turtle's state
+    std::stack<std::tuple<double, double, double>> stateStack;
+
+    for (char c: result){
+        if (alphabet.find(c) != alphabet.end()){
+            if (l_system.draw(c)){
+                // Calculate new endpoint coordinates based on the current position, angle, and rules
+                double new_x1 = x0 + cos(angleRad);
+                double new_y1 = y0 + sin(angleRad);
+                // Create a Line2D object with the calculated endpoints and color
+                Line2D line(Point2D(x0, y0), Point2D(new_x1, new_y1), colorl);
+
+                // Add the line to the Lines2D object
+                lines.push_back(line);
+
+                // Update the current position for the next iteration
+                x0 = new_x1;
+                y0 = new_y1;
+            }
+        } else if (c == '+') {
+            angleRad += angle * M_PI / 180;
+        } else if (c == '-') {
+            angleRad -= angle * M_PI / 180;
+        } else if (c == '(') {
+            // Save the current state
+            stateStack.push(std::make_tuple(x0, y0, angleRad));
+        } else if (c == ')') {
+            // Restore the last saved state
+            if (!stateStack.empty()) {
+                std::tie(x0, y0, angleRad) = stateStack.top();
+                stateStack.pop();
+            }
+        }
+    }
+}
 
 img::EasyImage generate_image(const ini::Configuration &configuration) {
     // Parse general settings
@@ -35,12 +106,7 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
         std::string figureKey = "Figure" + std::to_string(i);
         Figure fig;
 
-        //TEMP
         std::string type = configuration[figureKey]["type"].as_string_or_die();
-        if("3DLSystem" == type){
-            return img::EasyImage(500,500);
-        }
-
         double scale = configuration[figureKey]["scale"].as_double_or_die();
         auto rotateX = configuration[figureKey]["rotateX"].as_double_or_die();
         auto rotateY = configuration[figureKey]["rotateY"].as_double_or_die();
@@ -48,23 +114,21 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
         auto center = configuration[figureKey]["center"].as_double_tuple_or_die();
         auto color = configuration[figureKey]["color"].as_double_tuple_or_die();
 
-
-//        int nrPoints = configuration[figureKey]["nrPoints"].as_int_or_die();
-//        for (int j = 0; j < nrPoints; j++) {
-//            auto point = configuration[figureKey]["point" + std::to_string(j)].as_double_tuple_or_die();
-//            fig.points.push_back(Vector3D::point(point[0], point[1], point[2]));
-//        }
-//        int nrLines = configuration[figureKey]["nrLines"].as_int_or_die();
-//        for (int j = 0; j < nrLines; j++) {
-//            auto line = configuration[figureKey]["line" + std::to_string(j)].as_int_tuple_or_die();
-//            Face face;
-//            face.point_indexes.push_back(line[0]);
-//            face.point_indexes.push_back(line[1]);
-//            fig.faces.push_back(face);
-//        }
-
         FigureMaker3D figureMaker3D;
-        if ("Tetrahedron" == type) {
+        if ("3DLSystem" == type) {
+            std::string inputfile = configuration[figureKey]["inputfile"].as_string_or_die();
+            LParser::LSystem3D l_system;
+            std::ifstream input_stream(inputfile);
+            input_stream >> l_system;
+            input_stream.close();
+
+            // editlines2d moet nu dus een nieuwe functie worden, en drawlines kan ik bijna helemaal overnemen, ik moet gewoon 2d naar 3d herschrijve en paar dinge mischien verandern
+
+
+
+        }
+
+        else if ("Tetrahedron" == type) {
             fig = figureMaker3D.createTetrahedron();
         } else if ("Octahedron" == type) {
             fig = figureMaker3D.createOctahedron();
@@ -90,7 +154,6 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
             auto R = configuration[figureKey]["R"].as_double_or_die();
             auto n = configuration[figureKey]["n"].as_int_or_die();
             auto m = configuration[figureKey]["m"].as_int_or_die();
-
             fig = figureMaker3D.createTorus(r, R, n, m);
         }
         fig.color = color;
