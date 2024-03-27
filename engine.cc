@@ -19,7 +19,7 @@
 #include <iostream>
 #include <stack>
 #include "FigureMaker3D.h"
-std::string ProcessString(const LParser::LSystem2D &l_system, const std::string &input) {
+std::string ProcessString(const LParser::LSystem3D &l_system, const std::string &input) {
     std::string new_result = "";
     for (char c : input) {
         if (l_system.get_alphabet().find(c) != l_system.get_alphabet().end()) {
@@ -31,7 +31,7 @@ std::string ProcessString(const LParser::LSystem2D &l_system, const std::string 
     return new_result;
 }
 
-std::string BuildString(LParser::LSystem2D &l_system, unsigned int iterations) {
+std::string BuildString(LParser::LSystem3D &l_system, unsigned int iterations) {
     std::string result = l_system.get_initiator();
     for (unsigned int i = 0; i < iterations; i++) {
         result = ProcessString(l_system, result);
@@ -39,38 +39,31 @@ std::string BuildString(LParser::LSystem2D &l_system, unsigned int iterations) {
     return result;
 }
 
-
-void EditLines2D(Lines2D &lines, LParser::LSystem2D &l_system, const std::vector<double> &color) {
-    Color colorl(color[0], color[1], color[2]);
-
-    std::string initiator = l_system.get_initiator();
+Figure BuildFigureFromString(const std::string &input, LParser::LSystem3D &l_system) {
+    Figure fig;
     double angle = l_system.get_angle();
-    double startingAngle = l_system.get_starting_angle();
-    unsigned int iterations = l_system.get_nr_iterations();
     std::set<char> alphabet = l_system.get_alphabet();
 
-    std::string result = BuildString(l_system, iterations);
 
     double x0 = 0;
     double y0 = 0;
-    double angleRad = startingAngle * M_PI / 180;
+    double angleRad = angle * M_PI / 180;
 
-    // Stack to save and restore the turtle's state
     std::stack<std::tuple<double, double, double>> stateStack;
 
-    for (char c: result){
+
+
+    for (char c: input){
         if (alphabet.find(c) != alphabet.end()){
             if (l_system.draw(c)){
                 // Calculate new endpoint coordinates based on the current position, angle, and rules
                 double new_x1 = x0 + cos(angleRad);
                 double new_y1 = y0 + sin(angleRad);
-                // Create a Line2D object with the calculated endpoints and color
-                Line2D line(Point2D(x0, y0), Point2D(new_x1, new_y1), colorl);
 
-                // Add the line to the Lines2D object
-                lines.push_back(line);
+                fig.points.push_back(Vector3D::point(x0, y0, 0));
+                fig.points.push_back(Vector3D::point(new_x1, new_y1, 0));
+                fig.faces.push_back(Face({(int)fig.points.size() - 2, (int)fig.points.size() - 1}));
 
-                // Update the current position for the next iteration
                 x0 = new_x1;
                 y0 = new_y1;
             }
@@ -79,26 +72,21 @@ void EditLines2D(Lines2D &lines, LParser::LSystem2D &l_system, const std::vector
         } else if (c == '-') {
             angleRad -= angle * M_PI / 180;
         } else if (c == '(') {
-            // Save the current state
             stateStack.push(std::make_tuple(x0, y0, angleRad));
         } else if (c == ')') {
-            // Restore the last saved state
             if (!stateStack.empty()) {
                 std::tie(x0, y0, angleRad) = stateStack.top();
                 stateStack.pop();
             }
         }
     }
+    return fig;
 }
 
+
 img::EasyImage generate_image(const ini::Configuration &configuration) {
-    // Parse general settings
-
-
-
     int size = configuration["General"]["size"].as_int_or_die();
     auto background_color = configuration["General"]["backgroundcolor"].as_double_tuple_or_die();
-
     int nrFigures = configuration["General"]["nrFigures"].as_int_or_die();
     Figures3D figures;
 
@@ -122,8 +110,9 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
             input_stream >> l_system;
             input_stream.close();
 
-            // editlines2d moet nu dus een nieuwe functie worden, en drawlines kan ik bijna helemaal overnemen, ik moet gewoon 2d naar 3d herschrijve en paar dinge mischien verandern
+            std::string result = BuildString(l_system, l_system.get_nr_iterations());
 
+            fig = BuildFigureFromString(result, l_system);
 
 
         }
@@ -249,9 +238,3 @@ int main(int argc, char const *argv[]) {
     }
     return retVal;
 }
-
-
-
-// TODO : when i have multiple figures  something goes wrong with the color of the figures, they all end up with the same color but i know why. its because i use the color when im out of the loop, so only the last color gets applied. what should i do to fix this issue?
-// TODO : grote van mijn images
-

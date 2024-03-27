@@ -7,7 +7,7 @@
 #include <vector>
 #include <string>
 #include <list>
-#include "Vector3D.h"
+#include "vector3d.h"
 
 // Definieer een klasse voor een vlak, bestaande uit punten
 class Face {
