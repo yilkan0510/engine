@@ -38,45 +38,66 @@ std::string BuildString(LParser::LSystem3D &l_system, unsigned int iterations) {
     }
     return result;
 }
-
 Figure BuildFigureFromString(const std::string &input, LParser::LSystem3D &l_system) {
     Figure fig;
-    double angle = l_system.get_angle();
+    //angle in radian
+    double angle = l_system.get_angle() * M_PI / 180;
     std::set<char> alphabet = l_system.get_alphabet();
 
+    Vector3D H = Vector3D::point(1, 0, 0);
+    Vector3D L = Vector3D::point(0, 1, 0);
+    Vector3D U = Vector3D::point(0, 0, 1);
 
-    double x0 = 0;
-    double y0 = 0;
-    double angleRad = angle * M_PI / 180;
-
-    std::stack<std::tuple<double, double, double>> stateStack;
-
-
+    std::stack<std::tuple<Vector3D, Vector3D, Vector3D, Vector3D>> stateStack;
+    Vector3D currentPoint = Vector3D::point(0, 0, 0);
 
     for (char c: input){
+
         if (alphabet.find(c) != alphabet.end()){
             if (l_system.draw(c)){
-                // Calculate new endpoint coordinates based on the current position, angle, and rules
-                double new_x1 = x0 + cos(angleRad);
-                double new_y1 = y0 + sin(angleRad);
-
-                fig.points.push_back(Vector3D::point(x0, y0, 0));
-                fig.points.push_back(Vector3D::point(new_x1, new_y1, 0));
+                Vector3D newPoint = currentPoint + H;
+                fig.points.push_back(currentPoint);
+                fig.points.push_back(newPoint);
                 fig.faces.push_back(Face({(int)fig.points.size() - 2, (int)fig.points.size() - 1}));
-
-                x0 = new_x1;
-                y0 = new_y1;
+                currentPoint = newPoint;
             }
         } else if (c == '+') {
-            angleRad += angle * M_PI / 180;
+            Vector3D Hnew = H * cos(angle) + L * sin(angle);
+            L = H * -sin(angle) + L * cos(angle);
+            H = Hnew;
         } else if (c == '-') {
-            angleRad -= angle * M_PI / 180;
+            Vector3D Hnew = H * cos(-angle) + L * sin(-angle);
+            L = H * -sin(-angle) + L * cos(-angle);
+            H = Hnew;
+        } else if (c == '^') {
+            Vector3D Hnew = H * cos(angle) + U * sin(angle);
+            U = H * -sin(angle) + U * cos(angle);
+            H = Hnew;
+        } else if (c == '&') {
+            Vector3D Hnew = H * cos(-angle) + U * sin(-angle);
+            U = H * -sin(-angle) + U * cos(-angle);
+            H = Hnew;
+        } else if (c == '\\') {
+            Vector3D Lnew = L * cos(angle) - U * sin(angle);
+            U = L * sin(angle) + U * cos(angle);
+            L = Lnew;
+        } else if (c == '/') {
+            Vector3D Lnew = L * cos(-angle) - U * sin(-angle);
+            U = L * sin(-angle) + U * cos(-angle);
+            L = Lnew;
+        } else if (c == '|') {
+            H = H * -1;
+            L = L * -1;
         } else if (c == '(') {
-            stateStack.push(std::make_tuple(x0, y0, angleRad));
+            stateStack.push(std::make_tuple(currentPoint, H, L, U));
         } else if (c == ')') {
             if (!stateStack.empty()) {
-                std::tie(x0, y0, angleRad) = stateStack.top();
+                auto state = stateStack.top();
                 stateStack.pop();
+                currentPoint = std::get<0>(state);
+                H = std::get<1>(state);
+                L = std::get<2>(state);
+                U = std::get<3>(state);
             }
         }
     }
@@ -113,8 +134,6 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
             std::string result = BuildString(l_system, l_system.get_nr_iterations());
 
             fig = BuildFigureFromString(result, l_system);
-
-
         }
 
         else if ("Tetrahedron" == type) {
