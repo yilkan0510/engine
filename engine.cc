@@ -199,6 +199,20 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
             auto n = configuration[figureKey]["n"].as_int_or_die();
             auto m = configuration[figureKey]["m"].as_int_or_die();
             fig = figureMaker3D.createTorus(r, R, n, m);
+        } else if ("LineDrawing" == type) {
+            int nrPoints = configuration[figureKey]["nrPoints"].as_int_or_die();
+            for (int j = 0; j < nrPoints; j++) {
+                auto point = configuration[figureKey]["point" + std::to_string(j)].as_double_tuple_or_die();
+                fig.points.push_back(Vector3D::point(point[0], point[1], point[2]));
+            }
+            int nrLines = configuration[figureKey]["nrLines"].as_int_or_die();
+            for (int j = 0; j < nrLines; j++) {
+                auto line = configuration[figureKey]["line" + std::to_string(j)].as_int_tuple_or_die();
+                Face face;
+                face.point_indexes.push_back(line[0]);
+                face.point_indexes.push_back(line[1]);
+                fig.faces.push_back(face);
+            }
         }
         fig.color = color;
 
@@ -226,28 +240,8 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
     Lines2D projectedLines = perspProj.doProjectionfig(figures, 1.0);
 
     img::EasyImage image;
-    ZBuffer zbuffer;
-    if (Zbuf) {
-        // Bepaal de afmetingen van je afbeelding en initialiseer de ZBuffer
-        int imageWidth, imageHeight;
-        std::tie(imageWidth, imageHeight) = determineImageSize(projectedLines, size);
-        image = img::EasyImage(imageWidth, imageHeight,
-                               img::Color(background_color[0], background_color[1], background_color[2]));
-        zbuffer = ZBuffer(imageWidth, imageHeight);
-
-        // Gebruik draw_zbuf_line voor elke lijn in projectedLines, in plaats van drawlines2D
-        for (const Line2D &line : projectedLines) {
-            // Aannemende dat line.color een instantie is van jouw eigen Color klasse
-            img::Color color(line.color.red * 255, line.color.green * 255, line.color.blue * 255);
-            draw_zbuf_line(image, zbuffer,
-                           static_cast<int>(line.p1.x), static_cast<int>(line.p1.y), line.z1,
-                           static_cast<int>(line.p2.x), static_cast<int>(line.p2.y), line.z2,
-                           color);
-        }
-    } else {
-        // Als ZBuffering niet vereist is, teken dan zoals normaal
-        image = drawlines2D(projectedLines, size, background_color);
-    }
+    // Als ZBuffering niet vereist is, teken dan zoals normaal
+    image = drawlines2D(projectedLines, size, background_color, Zbuf);
     return image;
 }
 
