@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/yilka/Documents/semester/CG
+# Install script for directory: C:/Users/yilka/Desktop/temp
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,18 +39,18 @@ endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "C:/Users/yilka/Documents/semester/CG/engine.exe")
+   "C:/Users/yilka/Desktop/temp/engine.exe")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "C:/Users/yilka/Documents/semester/CG" TYPE EXECUTABLE FILES "C:/Users/yilka/Documents/semester/CG/cmake-build-debug/engine.exe")
-  if(EXISTS "$ENV{DESTDIR}/C:/Users/yilka/Documents/semester/CG/engine.exe" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/C:/Users/yilka/Documents/semester/CG/engine.exe")
+  file(INSTALL DESTINATION "C:/Users/yilka/Desktop/temp" TYPE EXECUTABLE FILES "C:/Users/yilka/Desktop/temp/cmake-build-debug/engine.exe")
+  if(EXISTS "$ENV{DESTDIR}/C:/Users/yilka/Desktop/temp/engine.exe" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/C:/Users/yilka/Desktop/temp/engine.exe")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "C:/Program Files/JetBrains/CLion 2023.2.2/bin/mingw/bin/strip.exe" "$ENV{DESTDIR}/C:/Users/yilka/Documents/semester/CG/engine.exe")
+      execute_process(COMMAND "C:/Program Files/JetBrains/CLion 2023.2.2/bin/mingw/bin/strip.exe" "$ENV{DESTDIR}/C:/Users/yilka/Desktop/temp/engine.exe")
     endif()
   endif()
 endif()
@@ -63,5 +63,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/yilka/Documents/semester/CG/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/yilka/Desktop/temp/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -28,6 +28,7 @@ set(engine_sources
         FigureMaker3D.cpp
         LSystem3DGenerator.cpp
         LSystem3DGenerator.cpp
+        ZBuffer.h
 )
 
 ############################################################

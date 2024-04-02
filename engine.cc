@@ -8,6 +8,8 @@
 #include "Eye_point_transformaties.h"
 #include "color-point-line.h"
 #include "Perspectiefprojectie.h"
+#include "ZBuffer.h"
+#include <algorithm>
 
 #define _USE_MATH_DEFINES
 
@@ -104,11 +106,47 @@ Figure BuildFigureFromString(const std::string &input, LParser::LSystem3D &l_sys
     return fig;
 }
 
+std::tuple<int, int> determineImageSize(const Lines2D &projectedLines, int size) {
+    if (projectedLines.empty()) {
+        return std::make_tuple(0, 0); // Geen lijnen om te tekenen
+    }
+
+    double minX = std::numeric_limits<double>::max();
+    double maxX = std::numeric_limits<double>::lowest();
+    double minY = std::numeric_limits<double>::max();
+    double maxY = std::numeric_limits<double>::lowest();
+
+    for (const auto& line : projectedLines) {
+        minX = std::min({minX, line.p1.x, line.p2.x});
+        maxX = std::max({maxX, line.p1.x, line.p2.x});
+        minY = std::min({minY, line.p1.y, line.p2.y});
+        maxY = std::max({maxY, line.p1.y, line.p2.y});
+    }
+
+    // Bereken de schaal gebaseerd op de grootte parameter en de afmetingen van de lijnen
+    double rangeX = maxX - minX;
+    double rangeY = maxY - minY;
+    double imageScale = size / std::max(rangeX, rangeY);
+
+    int imageWidth = static_cast<int>(std::ceil(rangeX * imageScale));
+    int imageHeight = static_cast<int>(std::ceil(rangeY * imageScale));
+
+    return std::make_tuple(imageWidth, imageHeight);
+}
 
 img::EasyImage generate_image(const ini::Configuration &configuration) {
     int size = configuration["General"]["size"].as_int_or_die();
     auto background_color = configuration["General"]["backgroundcolor"].as_double_tuple_or_die();
     int nrFigures = configuration["General"]["nrFigures"].as_int_or_die();
+
+    bool Zbuf = false;
+    std::string GeneralType = configuration["General"]["type"].as_string_or_die();
+    if (GeneralType == "ZBufferedWireframe") {
+        Zbuf = true;
+    } else {
+        Zbuf = false;
+    }
+
     Figures3D figures;
 
     for (int i = 0; i < nrFigures; i++) {
@@ -134,9 +172,7 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
             std::string result = BuildString(l_system, l_system.get_nr_iterations());
 
             fig = BuildFigureFromString(result, l_system);
-        }
-
-        else if ("Tetrahedron" == type) {
+        } else if ("Tetrahedron" == type) {
             fig = figureMaker3D.createTetrahedron();
         } else if ("Octahedron" == type) {
             fig = figureMaker3D.createOctahedron();
@@ -189,8 +225,29 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
 
     Lines2D projectedLines = perspProj.doProjectionfig(figures, 1.0);
 
-    img::EasyImage image = drawlines2D(projectedLines, size, background_color );
+    img::EasyImage image;
+    ZBuffer zbuffer;
+    if (Zbuf) {
+        // Bepaal de afmetingen van je afbeelding en initialiseer de ZBuffer
+        int imageWidth, imageHeight;
+        std::tie(imageWidth, imageHeight) = determineImageSize(projectedLines, size);
+        image = img::EasyImage(imageWidth, imageHeight,
+                               img::Color(background_color[0], background_color[1], background_color[2]));
+        zbuffer = ZBuffer(imageWidth, imageHeight);
 
+        // Gebruik draw_zbuf_line voor elke lijn in projectedLines, in plaats van drawlines2D
+        for (const Line2D &line : projectedLines) {
+            // Aannemende dat line.color een instantie is van jouw eigen Color klasse
+            img::Color color(line.color.red * 255, line.color.green * 255, line.color.blue * 255);
+            draw_zbuf_line(image, zbuffer,
+                           static_cast<int>(line.p1.x), static_cast<int>(line.p1.y), line.z1,
+                           static_cast<int>(line.p2.x), static_cast<int>(line.p2.y), line.z2,
+                           color);
+        }
+    } else {
+        // Als ZBuffering niet vereist is, teken dan zoals normaal
+        image = drawlines2D(projectedLines, size, background_color);
+    }
     return image;
 }
 

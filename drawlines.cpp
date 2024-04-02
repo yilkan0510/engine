@@ -3,6 +3,7 @@
 #include <algorithm>
 
 
+
 img::EasyImage drawlines2D(Lines2D &lines, int size, const std::vector<double> backgroundcolor) {
     // Xmin, Xmax, Ymin, Ymax bepalen
 
@@ -88,4 +89,57 @@ img::EasyImage drawlines2D(Lines2D &lines, int size, const std::vector<double> b
         image.draw_line(lines[i].p1.x,lines[i].p1.y,lines[i].p2.x,lines[i].p2.y,img::Color(lines[i].color.red*255,lines[i].color.green*255,lines[i].color.blue*255));
     }
     return image;
+}
+
+void draw_zbuf_line(img::EasyImage &image, ZBuffer &zbuffer,
+                       int x0, int y0, double z0,
+                       int x1, int y1, double z1,
+                       const img::Color &color) {
+    bool steep = std::abs(y1 - y0) > std::abs(x1 - x0);
+    if (steep) {
+        std::swap(x0, y0);
+        std::swap(x1, y1);
+    }
+    if (x0 > x1) {
+        std::swap(x0, x1);
+        std::swap(y0, y1);
+        std::swap(z0, z1);
+    }
+    int dx = x1 - x0;
+    int dy = std::abs(y1 - y0);
+    int error = dx / 2;
+    int ystep = (y0 < y1) ? 1 : -1;
+    int y = y0;
+
+    double zInverseStart = 1.0 / z0;
+    double zInverseEnd = 1.0 / z1;
+    double zInverse;
+
+    for (int x = x0; x <= x1; x++) {
+        // Linear interpolation of the inverse Z value
+        if (dx == 0) {
+            zInverse = zInverseStart;
+        } else {
+            zInverse = zInverseStart + (zInverseEnd - zInverseStart) * (x - x0) / dx;
+        }
+
+        // Convert back to Z value to compare with Z-buffer
+        double z = 1.0 / zInverse;
+
+        if (steep) {
+            // If the line is steep, we swap x and y back
+            if (zbuffer.updatePixel(y, x, z)) {
+                image(y, x) = color;
+            }
+        } else {
+            if (zbuffer.updatePixel(x, y, z)) {
+                image(x, y) = color;
+            }
+        }
+        error -= dy;
+        if (error < 0) {
+            y += ystep;
+            error += dx;
+        }
+    }
 }
