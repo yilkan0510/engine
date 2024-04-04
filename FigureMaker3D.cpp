@@ -27,7 +27,7 @@ std::vector<Vector3D> calculateMiddleTriangle(Figure &icosahedron) {
 }
 
 
-Figure divideInTriangles(Figure &fig) {
+Figure FigureMaker3D::divideInTriangles(Figure &fig) {
     Figure newFig;
 
     // Copy the existing points to the new figure
@@ -169,12 +169,11 @@ Figure FigureMaker3D::createCylinder(const int n, const double h) {
         cylinder.points.push_back(Vector3D::point(cos(angle), sin(angle), h));
     }
 
-    // Create the side faces
+    // Create the side faces with 4 points each (forming a single quadrilateral per face)
     for (int i = 0; i < n; ++i) {
         int nextIndex = (i + 1) % n;
-        // Create two triangles for each side face
-        cylinder.faces.push_back(Face({ nextIndex, n + nextIndex}));
-        cylinder.faces.push_back(Face({n + nextIndex, n + i}));
+        // Quadrilateral face: i, nextIndex, n + nextIndex, n + i
+        cylinder.faces.push_back(Face({i, nextIndex, n + nextIndex, n + i}));
     }
 
     // Create the base face
@@ -193,6 +192,7 @@ Figure FigureMaker3D::createCylinder(const int n, const double h) {
 
     return cylinder;
 }
+
 
 
 Figure FigureMaker3D::createTorus(const double r, const double R, const int n, const int m) {
