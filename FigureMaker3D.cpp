@@ -199,8 +199,8 @@ Figure FigureMaker3D::createTorus(const double r, const double R, const int n, c
     Figure torus;
 
     // Generate the points
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
+    for (int j = 0; j < n; j++) {
+        for (int i = 0; i < m; i++) {
             double u = (2 * M_PI * i) / n;
             double v = (2 * M_PI * j) / m;
             double x = (R + r * cos(v)) * cos(u);
@@ -223,7 +223,7 @@ Figure FigureMaker3D::createTorus(const double r, const double R, const int n, c
 
             // First triangle of the quad
             torus.faces.push_back(Face({ p2, p3}));
-            // Second triangle of the qu
+            // Second triangle of the quad
             torus.faces.push_back(Face({ p3, p4}));
         }
     }

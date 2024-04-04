@@ -106,34 +106,6 @@ Figure BuildFigureFromString(const std::string &input, LParser::LSystem3D &l_sys
     return fig;
 }
 
-std::tuple<int, int> determineImageSize(const Lines2D &projectedLines, int size) {
-    if (projectedLines.empty()) {
-        return std::make_tuple(0, 0); // Geen lijnen om te tekenen
-    }
-
-    double minX = std::numeric_limits<double>::max();
-    double maxX = std::numeric_limits<double>::lowest();
-    double minY = std::numeric_limits<double>::max();
-    double maxY = std::numeric_limits<double>::lowest();
-
-    for (const auto& line : projectedLines) {
-        minX = std::min({minX, line.p1.x, line.p2.x});
-        maxX = std::max({maxX, line.p1.x, line.p2.x});
-        minY = std::min({minY, line.p1.y, line.p2.y});
-        maxY = std::max({maxY, line.p1.y, line.p2.y});
-    }
-
-    // Bereken de schaal gebaseerd op de grootte parameter en de afmetingen van de lijnen
-    double rangeX = maxX - minX;
-    double rangeY = maxY - minY;
-    double imageScale = size / std::max(rangeX, rangeY);
-
-    int imageWidth = static_cast<int>(std::ceil(rangeX * imageScale));
-    int imageHeight = static_cast<int>(std::ceil(rangeY * imageScale));
-
-    return std::make_tuple(imageWidth, imageHeight);
-}
-
 img::EasyImage generate_image(const ini::Configuration &configuration) {
     int size = configuration["General"]["size"].as_int_or_die();
     auto background_color = configuration["General"]["backgroundcolor"].as_double_tuple_or_die();

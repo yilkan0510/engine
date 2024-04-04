@@ -9,7 +9,6 @@
 #include <list>
 #include "vector3d.h"
 
-// Definieer een klasse voor een vlak, bestaande uit punten
 class Face {
 public:
     std::vector<int> point_indexes;
@@ -21,7 +20,6 @@ public:
 public:
 };
 
-// Definieer een klasse voor een 3D figuur
 class Figure {
 public:
     std::vector<Vector3D> points;

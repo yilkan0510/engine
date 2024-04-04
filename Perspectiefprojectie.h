@@ -10,6 +10,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "color-point-line.h"
+#include <algorithm>
 
 class Perspectiefprojectie {
 public:

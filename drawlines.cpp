@@ -1,8 +1,7 @@
 #include "drawlines.h"
 #include <cmath>
 #include <algorithm>
-
-
+#include <sstream>
 
 img::EasyImage drawlines2D(Lines2D &lines, int size, const std::vector<double> backgroundcolor, bool Zbuf) {
     // Xmin, Xmax, Ymin, Ymax bepalen
@@ -86,18 +85,14 @@ img::EasyImage drawlines2D(Lines2D &lines, int size, const std::vector<double> b
     // tekenen van de lijnen
     if (Zbuf) {
         ZBuffer zbuffer(imagex, imagey);
-
         for (const auto &line : lines) {
-            // Prepare line endpoints, taking into account the image scaling and translation
             int x0 = round(line.p1.x);
             int y0 = round(line.p1.y);
-            double z0 = line.z1; // Assuming line.z1 is the Z-value for line.p1 after scaling and translation adjustments
-
+            double z0 = line.z1;
+            double z1 = line.z2;
             int x1 = round(line.p2.x);
             int y1 = round(line.p2.y);
-            double z1 = line.z2; // Assuming line.z2 is the Z-value for line.p2
 
-            // Draw the line with Z-buffering
             draw_zbuf_line(image, zbuffer, x0, y0, z0, x1, y1, z1, img::Color(line.color.red*255, line.color.green*255, line.color.blue*255));
         }
     } else {
@@ -107,6 +102,7 @@ img::EasyImage drawlines2D(Lines2D &lines, int size, const std::vector<double> b
     }
     return image;
 }
+
 
 void draw_zbuf_line(img::EasyImage &image, ZBuffer &zbuffer,
                     int x0, int y0, double z0,
@@ -128,8 +124,8 @@ void draw_zbuf_line(img::EasyImage &image, ZBuffer &zbuffer,
     int ystep = (y0 < y1) ? 1 : -1;
     int y = y0;
     for (int x = x0; x <= x1; x++) {
-        double t = (x - x0) / static_cast<double>(dx); // Calculate relative position along the line
-        double z = z0 * (1 - t) + z1 * t; // Interpolate Z-value based on relative position
+        double t = (x - x0) / static_cast<double>(dx);
+        double z = z0 * (1 - t) + z1 * t;
         if (steep) {
             if (z < zbuffer.getPixelZValue(y, x)) {
                 image(y, x) = color;
@@ -148,3 +144,4 @@ void draw_zbuf_line(img::EasyImage &image, ZBuffer &zbuffer,
         }
     }
 }
+
