@@ -210,21 +210,17 @@ Figure FigureMaker3D::createTorus(const double r, const double R, const int n, c
         }
     }
 
-    // Generate the faces
+// Generate the faces for the torus
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
+            int current = i * m + j;
             int nextI = (i + 1) % n;
             int nextJ = (j + 1) % m;
-            // Each face is a quad made of two triangles
-            int p1 = i * m + j;
-            int p2 = nextI * m + j;
-            int p3 = nextI * m + nextJ;
-            int p4 = i * m + nextJ;
+            int nextInCurrentRow = i * m + nextJ;
+            int nextInNextRow = nextI * m + j;
 
-            // First triangle of the quad
-            torus.faces.push_back(Face({ p2, p3}));
-            // Second triangle of the quad
-            torus.faces.push_back(Face({ p3, p4}));
+            // The quad face
+            torus.faces.push_back(Face({current, nextInCurrentRow, nextI * m + nextJ, nextInNextRow}));
         }
     }
 
