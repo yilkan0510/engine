@@ -317,6 +317,30 @@ Transformaties.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/Transformaties.cpp.s
 .PHONY : Transformaties.cpp.s
 
+ZBuffer.obj: ZBuffer.cpp.obj
+.PHONY : ZBuffer.obj
+
+# target to build an object file
+ZBuffer.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/ZBuffer.cpp.obj
+.PHONY : ZBuffer.cpp.obj
+
+ZBuffer.i: ZBuffer.cpp.i
+.PHONY : ZBuffer.i
+
+# target to preprocess a source file
+ZBuffer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/ZBuffer.cpp.i
+.PHONY : ZBuffer.cpp.i
+
+ZBuffer.s: ZBuffer.cpp.s
+.PHONY : ZBuffer.s
+
+# target to generate assembly for a file
+ZBuffer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/ZBuffer.cpp.s
+.PHONY : ZBuffer.cpp.s
+
 drawlines.obj: drawlines.cpp.obj
 .PHONY : drawlines.obj
 
@@ -492,6 +516,9 @@ help:
 	@echo ... Transformaties.obj
 	@echo ... Transformaties.i
 	@echo ... Transformaties.s
+	@echo ... ZBuffer.obj
+	@echo ... ZBuffer.i
+	@echo ... ZBuffer.s
 	@echo ... drawlines.obj
 	@echo ... drawlines.i
 	@echo ... drawlines.s

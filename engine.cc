@@ -111,12 +111,19 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
     auto background_color = configuration["General"]["backgroundcolor"].as_double_tuple_or_die();
     int nrFigures = configuration["General"]["nrFigures"].as_int_or_die();
 
-    bool Zbuf = false;
+    bool ZbufLijn = false;
+    bool ZbufDriehoek = false;
+
     std::string GeneralType = configuration["General"]["type"].as_string_or_die();
     if (GeneralType == "ZBufferedWireframe") {
-        Zbuf = true;
+        ZbufLijn = true;
     } else {
-        Zbuf = false;
+        ZbufLijn = false;
+    }
+    if (GeneralType == "ZBuffering") {
+        ZbufDriehoek = true;
+    } else {
+        ZbufDriehoek = false;
     }
 
     Figures3D figures;
@@ -204,6 +211,9 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
         Matrix eyePointMatrix = eyeTrans.eyePointTrans(eyePoint);
         eyeTrans.applyTranformation(fig, eyePointMatrix);
 
+        if (ZbufDriehoek) {
+            fig.triangulateFaces();
+        }
         figures.push_back(fig);
     }
 
@@ -213,7 +223,7 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
 
     img::EasyImage image;
     // Als ZBuffering niet vereist is, teken dan zoals normaal
-    image = drawlines2D(projectedLines, size, background_color, Zbuf);
+    image = drawlines2D(projectedLines, size, background_color, ZbufLijn, ZbufDriehoek);
     return image;
 }
 

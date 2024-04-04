@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/engine.dir/Perspectiefprojectie.cpp.obj.d"
   "CMakeFiles/engine.dir/Transformaties.cpp.obj"
   "CMakeFiles/engine.dir/Transformaties.cpp.obj.d"
+  "CMakeFiles/engine.dir/ZBuffer.cpp.obj"
+  "CMakeFiles/engine.dir/ZBuffer.cpp.obj.d"
   "CMakeFiles/engine.dir/drawlines.cpp.obj"
   "CMakeFiles/engine.dir/drawlines.cpp.obj.d"
   "CMakeFiles/engine.dir/easy_image.cc.obj"
