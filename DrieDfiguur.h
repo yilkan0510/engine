@@ -13,6 +13,8 @@ class Face {
 public:
     std::vector<int> point_indexes;
 
+    void triangulate(std::vector<Face>& faces) const;
+
     Face();
 
     explicit Face(const std::vector<int> &pointIndexes);
@@ -30,6 +32,8 @@ public:
 
     std::vector<Face> faces;
     std::vector<double> color;
+
+    void triangulateFaces();
 };
 
 typedef std::list<Figure> Figures3D;

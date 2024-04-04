@@ -27,6 +27,8 @@ public:
 
     Figure createDodecahedron();
 
+    Figure divideInTriangles(Figure &fig);
+
 };
 
 

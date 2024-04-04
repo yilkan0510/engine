@@ -14,6 +14,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/yilka/Desktop/engine/LSystem3DGenerator.cpp" "CMakeFiles/engine.dir/LSystem3DGenerator.cpp.obj" "gcc" "CMakeFiles/engine.dir/LSystem3DGenerator.cpp.obj.d"
   "C:/Users/yilka/Desktop/engine/Perspectiefprojectie.cpp" "CMakeFiles/engine.dir/Perspectiefprojectie.cpp.obj" "gcc" "CMakeFiles/engine.dir/Perspectiefprojectie.cpp.obj.d"
   "C:/Users/yilka/Desktop/engine/Transformaties.cpp" "CMakeFiles/engine.dir/Transformaties.cpp.obj" "gcc" "CMakeFiles/engine.dir/Transformaties.cpp.obj.d"
+  "C:/Users/yilka/Desktop/engine/ZBuffer.cpp" "CMakeFiles/engine.dir/ZBuffer.cpp.obj" "gcc" "CMakeFiles/engine.dir/ZBuffer.cpp.obj.d"
   "C:/Users/yilka/Desktop/engine/drawlines.cpp" "CMakeFiles/engine.dir/drawlines.cpp.obj" "gcc" "CMakeFiles/engine.dir/drawlines.cpp.obj.d"
   "C:/Users/yilka/Desktop/engine/easy_image.cc" "CMakeFiles/engine.dir/easy_image.cc.obj" "gcc" "CMakeFiles/engine.dir/easy_image.cc.obj.d"
   "C:/Users/yilka/Desktop/engine/engine.cc" "CMakeFiles/engine.dir/engine.cc.obj" "gcc" "CMakeFiles/engine.dir/engine.cc.obj.d"

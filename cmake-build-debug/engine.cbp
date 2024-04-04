@@ -158,6 +158,9 @@
 		<Unit filename="C:/Users/yilka/Desktop/engine/Transformaties.h">
 			<Option target="engine"/>
 		</Unit>
+		<Unit filename="C:/Users/yilka/Desktop/engine/ZBuffer.cpp">
+			<Option target="engine"/>
+		</Unit>
 		<Unit filename="C:/Users/yilka/Desktop/engine/ZBuffer.h">
 			<Option target="engine"/>
 		</Unit>

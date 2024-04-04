@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <sstream>
 
-img::EasyImage drawlines2D(Lines2D &lines, int size, const std::vector<double> backgroundcolor, bool Zbuf) {
+img::EasyImage drawlines2D(Lines2D &lines, int size, const std::vector<double> backgroundcolor, bool ZbufLijn, bool ZbufDriehoek) {
     // Xmin, Xmax, Ymin, Ymax bepalen
 
     double Xmin = lines[0].p1.x;
@@ -83,7 +83,7 @@ img::EasyImage drawlines2D(Lines2D &lines, int size, const std::vector<double> b
     img::EasyImage image(imagex, imagey, img::Color(backgroundcolor[0]*255, backgroundcolor[1]*255, backgroundcolor[2]*255));
 
     // tekenen van de lijnen
-    if (Zbuf) {
+    if (ZbufLijn) {
         ZBuffer zbuffer(imagex, imagey);
         for (const auto &line : lines) {
             int x0 = round(line.p1.x);
