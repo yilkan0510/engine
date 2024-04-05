@@ -114,6 +114,7 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
     bool ZbufLijn = false;
     bool ZbufDriehoek = false;
 
+
     std::string GeneralType = configuration["General"]["type"].as_string_or_die();
     if (GeneralType == "ZBufferedWireframe" || GeneralType == "ZBuffering") {
         ZbufLijn = true;
