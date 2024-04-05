@@ -20,8 +20,11 @@ Lines2D Perspectiefprojectie::doProjectionfig(const Figures3D &figures3D, const 
                 double z1 = -p1_3D.z; // Convert to positive z-value
                 double z2 = -p2_3D.z; // Convert to positive z-value
 
-                Point2D point1(doProjection( p1_3D, d));
-                Point2D point2(doProjection( p2_3D, d));
+                auto projection1 = doProjection(p1_3D, d);
+                Point2D point1 = std::get<0>(projection1);
+
+                auto projection2 = doProjection(p2_3D, d);
+                Point2D point2 = std::get<0>(projection2);
 
                 // Add the projected line to the list with its Z-values
                 lines2D.emplace_back(Line2D(point1, point2, z1, z2, Color(fig.color[0], fig.color[1], fig.color[2])));
@@ -32,11 +35,11 @@ Lines2D Perspectiefprojectie::doProjectionfig(const Figures3D &figures3D, const 
 }
 
 
-Point2D Perspectiefprojectie::doProjection(const Vector3D &point3D, const double d) {
+std::tuple<Point2D, double> Perspectiefprojectie::doProjection(const Vector3D &point3D, const double d) {
 
     double z = -point3D.z;
     double x_accent = (d * point3D.x) / z;
     double y_accent = (d * point3D.y) / z;
 
-    return Point2D(x_accent, y_accent);
+    return {Point2D(x_accent, y_accent), z};
 }

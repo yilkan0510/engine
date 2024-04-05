@@ -83,7 +83,7 @@ img::EasyImage drawlines2D(Lines2D &lines, int size, const std::vector<double> b
     img::EasyImage image(imagex, imagey, img::Color(backgroundcolor[0]*255, backgroundcolor[1]*255, backgroundcolor[2]*255));
 
     // tekenen van de lijnen
-    if (ZbufLijn) {
+    if (ZbufLijn == true || ZbufDriehoek == true){
         ZBuffer zbuffer(imagex, imagey);
         for (const auto &line : lines) {
             int x0 = round(line.p1.x);
@@ -94,6 +94,17 @@ img::EasyImage drawlines2D(Lines2D &lines, int size, const std::vector<double> b
             int y1 = round(line.p2.y);
 
             draw_zbuf_line(image, zbuffer, x0, y0, z0, x1, y1, z1, img::Color(line.color.red*255, line.color.green*255, line.color.blue*255));
+        }
+    }
+    if (ZbufDriehoek){
+        ZBuffer zbuffer(imagex, imagey);
+        for (int i = 0; i < lines.size(); i += 3) { // Assuming that every 3 lines form a triangle
+            Vector3D A = Vector3D::point(lines[i].p1.x, lines[i].p1.y, lines[i].z1);
+            Vector3D B = Vector3D::point(lines[i+1].p1.x, lines[i+1].p1.y, lines[i+1].z1);
+            Vector3D C = Vector3D::point(lines[i+2].p1.x, lines[i+2].p1.y, lines[i+2].z1);
+            Color color(lines[i].color.red*255, lines[i].color.green*255, lines[i].color.blue*255);
+
+            draw_zbuf_triag(zbuffer, image, A, B, C, d, dx, dy, color);
         }
     } else {
         for (int i = 0; i < lines.size(); i++) {
@@ -145,3 +156,37 @@ void draw_zbuf_line(img::EasyImage &image, ZBuffer &zbuffer,
     }
 }
 
+void draw_zbuf_triag(ZBuffer &zbuffer, img::EasyImage &image,
+                     Vector3D const &A, Vector3D const &B, Vector3D const &C,
+                     double d, double dx, double dy, Color color) {
+    // Bereken de bounding box van de driehoek
+    int minX = std::min({A.x, B.x, C.x});
+    int maxX = std::max({A.x, B.x, C.x});
+    int minY = std::min({A.y, B.y, C.y});
+    int maxY = std::max({A.y, B.y, C.y});
+
+    // Loop over de pixels in de bounding box
+    for (int x = minX; x <= maxX; x++) {
+        for (int y = minY; y <= maxY; y++) {
+            // Bereken de barycentrische coördinaten van de pixel
+            float lambda1 = ((B.y - C.y) * (x - C.x) + (C.x - B.x) * (y - C.y)) / ((B.y - C.y) * (A.x - C.x) + (C.x - B.x) * (A.y - C.y));
+            float lambda2 = ((C.y - A.y) * (x - C.x) + (A.x - C.x) * (y - C.y)) / ((B.y - C.y) * (A.x - C.x) + (C.x - B.x) * (A.y - C.y));
+            float lambda3 = 1.0f - lambda1 - lambda2;
+
+            // Als de pixel binnen de driehoek ligt
+            if (lambda1 >= 0 && lambda1 <= 1 && lambda2 >= 0 && lambda2 <= 1 && lambda3 >= 0 && lambda3 <= 1) {
+                // Bereken de diepte van de pixel
+                float z = A.z * lambda1 + B.z * lambda2 + C.z * lambda3;
+
+                // Als de pixel dichterbij is dan de huidige waarde in de Z-buffer
+                if (z < zbuffer.getPixelZValue(x, y)) {
+                    // Update de Z-buffer
+                    zbuffer.updatePixel(x, y, z);
+
+                    // Teken de pixel op de afbeelding
+                    image(x, y) = img::Color(color.red, color.green, color.blue);
+                }
+            }
+        }
+    }
+}

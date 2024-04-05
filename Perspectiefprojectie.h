@@ -11,12 +11,13 @@
 #include <cmath>
 #include "color-point-line.h"
 #include <algorithm>
+#include <tuple>
 
 class Perspectiefprojectie {
 public:
     Lines2D doProjectionfig(const Figures3D &figures3D, const double d);
 
-    Point2D doProjection(const Vector3D &point3D, const double d);
+    std::tuple<Point2D, double> doProjection(const Vector3D &point3D, const double d);
 
 
 

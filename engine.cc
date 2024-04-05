@@ -116,7 +116,7 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
 
 
     std::string GeneralType = configuration["General"]["type"].as_string_or_die();
-    if (GeneralType == "ZBufferedWireframe" || GeneralType == "ZBuffering") {
+    if (GeneralType == "ZBufferedWireframe") {
         ZbufLijn = true;
     } else {
         ZbufLijn = false;
@@ -212,9 +212,9 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
         Matrix eyePointMatrix = eyeTrans.eyePointTrans(eyePoint);
         eyeTrans.applyTranformation(fig, eyePointMatrix);
 
-//        if (ZbufDriehoek) {
-//            fig.triangulateFaces();
-//        }
+        if (ZbufDriehoek) {
+            fig.triangulateFaces();
+        }
 
         figures.push_back(fig);
     }
