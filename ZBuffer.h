@@ -1,22 +1,20 @@
+//
+// Created by Manasseh on 20/03/2024.
+//
+
 #ifndef ENGINE_ZBUFFER_H
 #define ENGINE_ZBUFFER_H
 #include <vector>
 #include <limits>
-
+using namespace std;
 class ZBuffer {
-public:
-    std::vector<std::vector<double>> buffer;
-    int width, height;
-
-    ZBuffer(int width, int height) : width(width), height(height), buffer(height, std::vector<double>(width, std::numeric_limits<double>::infinity())) {}
-
-    ZBuffer() {}
-
-    // Returns true if the pixel at (x,y) should be updated (new Z-value is closer)
-    bool updatePixel(int x, int y, double zValue);
-
-    // Gets the current Z-value of a pixel
-    double getPixelZValue(int x, int y);
+    vector<double> container;
+    public:
+    int width;
+    int height;
+    ZBuffer(const int width, const int height);
+    double get(const int x, const int y);
+    void set(const int x,const int y,const double val);
 };
 
 
