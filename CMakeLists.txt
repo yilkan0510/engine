@@ -17,18 +17,24 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${OWN_GXX_FLAGS}")
 set(engine_sources
         easy_image.cc
         engine.cc
-        l_parser.cc
         ini_configuration.cc
+        l_parser.cc
+        Color.cpp
+        Color.h
+        Point2D.cpp
+        Point2D.h
+        Lines2D.cpp
+        Lines2D.h
+        HelperFunctions.h
+        HelperFunctions.cpp
+        Face.cpp
+        Face.h
+        Figure.cpp
+        Figure.h
         vector3d.cc
-        DrieDfiguur.cpp
-        Transformaties.cpp
-        Eye_point_transformaties.cpp
-        Perspectiefprojectie.cpp
-        drawlines.cpp
-        FigureMaker3D.cpp
-        LSystem3DGenerator.cpp
-        LSystem3DGenerator.cpp
         ZBuffer.cpp
+        ZBuffer.h
+
 )
 
 ############################################################
@@ -36,4 +42,4 @@ set(engine_sources
 ############################################################
 set(exe_name "engine")
 add_executable( ${exe_name} ${engine_sources} )
-install( TARGETS ${exe_name} DESTINATION ${PROJECT_SOURCE_DIR}/ )
+install( TARGETS ${exe_name} DESTINATION .)
