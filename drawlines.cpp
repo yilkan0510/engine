@@ -72,14 +72,6 @@ img::EasyImage drawlines2D(Lines2D &lines, int size, const std::vector<double> b
         lines[i].p2.y += dy;
     }
 
-    //rond de coordinaten af
-    for (int i = 0; i < lines.size(); i++){
-        lines[i].p1.x = round(lines[i].p1.x);
-        lines[i].p1.y = round(lines[i].p1.y);
-        lines[i].p2.x = round(lines[i].p2.x);
-        lines[i].p2.y = round(lines[i].p2.y);
-    }
-
     img::EasyImage image(imagex, imagey, img::Color(backgroundcolor[0]*255, backgroundcolor[1]*255, backgroundcolor[2]*255));
 
     // tekenen van de lijnen
@@ -110,6 +102,13 @@ img::EasyImage drawlines2D(Lines2D &lines, int size, const std::vector<double> b
         for (int i = 0; i < lines.size(); i++) {
             image.draw_line(lines[i].p1.x,lines[i].p1.y,lines[i].p2.x,lines[i].p2.y,img::Color(lines[i].color.red*255,lines[i].color.green*255,lines[i].color.blue*255));
         }
+    }
+    //rond de coordinaten af
+    for (int i = 0; i < lines.size(); i++){
+        lines[i].p1.x = round(lines[i].p1.x);
+        lines[i].p1.y = round(lines[i].p1.y);
+        lines[i].p2.x = round(lines[i].p2.x);
+        lines[i].p2.y = round(lines[i].p2.y);
     }
     return image;
 }
@@ -159,34 +158,43 @@ void draw_zbuf_line(img::EasyImage &image, ZBuffer &zbuffer,
 void draw_zbuf_triag(ZBuffer &zbuffer, img::EasyImage &image,
                      Vector3D const &A, Vector3D const &B, Vector3D const &C,
                      double d, double dx, double dy, Color color) {
-    // Bereken de bounding box van de driehoek
-    int minX = std::min({A.x, B.x, C.x});
-    int maxX = std::max({A.x, B.x, C.x});
-    int minY = std::min({A.y, B.y, C.y});
-    int maxY = std::max({A.y, B.y, C.y});
+    // Compute the reciprocal of Z values for the vertices
+    double zReciprocalA = 1.0 / A.z;
+    double zReciprocalB = 1.0 / B.z;
+    double zReciprocalC = 1.0 / C.z;
 
-    // Loop over de pixels in de bounding box
+    // Calculate the bounding box of the triangle
+    double minX = std::min({A.x, B.x, C.x});
+    double maxX = std::max({A.x, B.x, C.x});
+    double minY = std::min({A.y, B.y, C.y});
+    double maxY = std::max({A.y, B.y, C.y});
+
+    // Loop over the pixels in the bounding box
     for (int x = minX; x <= maxX; x++) {
         for (int y = minY; y <= maxY; y++) {
-            // Bereken de barycentrische coördinaten van de pixel
-            float lambda1 = ((B.y - C.y) * (x - C.x) + (C.x - B.x) * (y - C.y)) / ((B.y - C.y) * (A.x - C.x) + (C.x - B.x) * (A.y - C.y));
-            float lambda2 = ((C.y - A.y) * (x - C.x) + (A.x - C.x) * (y - C.y)) / ((B.y - C.y) * (A.x - C.x) + (C.x - B.x) * (A.y - C.y));
-            float lambda3 = 1.0f - lambda1 - lambda2;
+            // Calculate the barycentric coordinates of the pixel
+            double lambda1 = ((B.y - C.y) * (x - C.x) + (C.x - B.x) * (y - C.y)) / ((B.y - C.y) * (A.x - C.x) + (C.x - B.x) * (A.y - C.y));
+            double lambda2 = ((C.y - A.y) * (x - C.x) + (A.x - C.x) * (y - C.y)) / ((B.y - C.y) * (A.x - C.x) + (C.x - B.x) * (A.y - C.y));
+            double lambda3 = 1.0 - lambda1 - lambda2;
 
-            // Als de pixel binnen de driehoek ligt
+            // Check if the pixel is within the triangle
             if (lambda1 >= 0 && lambda1 <= 1 && lambda2 >= 0 && lambda2 <= 1 && lambda3 >= 0 && lambda3 <= 1) {
-                // Bereken de diepte van de pixel
-                float z = A.z * lambda1 + B.z * lambda2 + C.z * lambda3;
+                // Interpolate the reciprocal Z value for the pixel
+                double zReciprocal = lambda1 * zReciprocalA + lambda2 * zReciprocalB + lambda3 * zReciprocalC;
 
-                // Als de pixel dichterbij is dan de huidige waarde in de Z-buffer
+                // Calculate the corrected Z value
+                double z = 1.0 / zReciprocal;
+
+                // Check if the pixel is closer than the current value in the Z-buffer
                 if (z < zbuffer.getPixelZValue(x, y)) {
-                    // Update de Z-buffer
+                    // Update the Z-buffer
                     zbuffer.updatePixel(x, y, z);
 
-                    // Teken de pixel op de afbeelding
+                    // Draw the pixel on the image
                     image(x, y) = img::Color(color.red, color.green, color.blue);
                 }
             }
         }
     }
 }
+

@@ -1,25 +1,19 @@
-//
-// Created by Manasseh on 20/03/2024.
-//
-
 #include "ZBuffer.h"
 
-
-ZBuffer::ZBuffer(const int width, const int height) {
-    double posInf = std::numeric_limits<double>::infinity();
-    double negInf = -std::numeric_limits<double>::infinity();
-    this->width = width;
-    this->height = height;
-    container.reserve(height*width);
-    for(int i = 0; i < height*width; i++){
-        container.push_back(posInf);
+bool ZBuffer::updatePixel(int x, int y, double zValue) {
+    if (x >= 0 && x < width && y >= 0 && y < height) {
+        double oldZ = buffer[y][x];
+        if (zValue < oldZ) {
+            buffer[y][x] = zValue;
+            return true;
+        }
     }
+    return false;
 }
 
-double ZBuffer::get(const int x, const int y) {
-    return container[x*height + y];
-}
-
-void ZBuffer::set(const int x, const int y,const double val) {
-    container[x*height + y] = val;
+double ZBuffer::getPixelZValue(int x, int y) {
+    if (x >= 0 && x < width && y >= 0 && y < height) {
+        return buffer[y][x];
+    }
+    return std::numeric_limits<double>::infinity(); // Return infinity if out of bounds
 }
