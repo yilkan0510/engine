@@ -300,6 +300,59 @@ Figure FigureMaker3D::createDodecahedron() {
     return dodecahedron;
 }
 
+Matrix FigureMaker3D::scaleFigure(double scale) {
+    Matrix m;
+    m(1, 1) = scale;
+    m(2, 2) = scale;
+    m(3, 3) = scale;
+    m(4, 4) = 1; // Zorg ervoor dat de homogene coördinaat correct blijft
+    return m;
+}
+
+Matrix FigureMaker3D::translate(const Vector3D& vector) {
+    Matrix m;
+    // Set the diagonal to 1 for proper affine transformation
+    m(1, 1) = 1;
+    m(2, 2) = 1;
+    m(3, 3) = 1;
+    m(4, 4) = 1;
+
+    // Set translation values at the bottom row, typical for graphics transformations
+    m(4, 1) = vector.x;
+    m(4, 2) = vector.y;
+    m(4, 3) = vector.z;
+
+    return m;
+}
+
+void FigureMaker3D::applyTransformation(Figure& fig, const Matrix& m) {
+    for (Vector3D& point : fig.points) {
+        point = point * m; // Gebruik de overbelaste operator* voor Matrix en Vector3D
+    }
+}
+
+
+void FigureMaker3D::generateFractal(Figure& fig, Figures3D& fractal, int nr_iterations, double scale) {
+    if (nr_iterations == 0) {
+        fractal.push_back(fig); // Geen verdere iteraties nodig, voeg de originele figuur toe aan de collectie
+        return;
+    }
+
+    for (const Vector3D& point : fig.points) {
+        Figure scaledFig = fig; // Maak een kopie van de originele figuur
+
+        // Schaal en verplaats de figuur
+        Matrix scalingMatrix = scaleFigure(scale);
+        applyTransformation(scaledFig, scalingMatrix);
+
+        Vector3D translation = point - scaledFig.center(); // Bereken de translatie nodig om het punt te aligneren
+        Matrix translationMatrix = translate(translation);
+        applyTransformation(scaledFig, translationMatrix);
+
+        // Recursieve aanroep
+        generateFractal(scaledFig, fractal, nr_iterations - 1, scale);
+    }
+}
 
 
 

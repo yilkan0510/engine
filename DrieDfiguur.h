@@ -8,6 +8,7 @@
 #include <string>
 #include <list>
 #include "vector3d.h"
+#include <vector>
 
 class Face {
 public:
@@ -34,6 +35,9 @@ public:
     std::vector<double> color;
 
     void triangulateFaces();
+
+    Vector3D center() const;
+
 };
 
 typedef std::list<Figure> Figures3D;

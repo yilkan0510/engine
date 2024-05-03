@@ -30,3 +30,17 @@ void Figure::triangulateFaces() {
     }
     faces = std::move(triangulated); // Vervang de faces door de getrianguleerde faces
 }
+
+Vector3D Figure::center() const {
+    if (points.empty()) return Vector3D::point(0, 0, 0); // Voorkom deling door nul en gebruik de juiste methode om een punt te creëren
+
+    double sumX = 0, sumY = 0, sumZ = 0;
+    for (const Vector3D& point : points) {
+        sumX += point.x;
+        sumY += point.y;
+        sumZ += point.z;
+    }
+    int numPoints = points.size();
+    // Gebruik de statische methode point om een nieuwe Vector3D als punt te creëren
+    return Vector3D::point(sumX / numPoints, sumY / numPoints, sumZ / numPoints);
+}

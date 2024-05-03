@@ -160,6 +160,14 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
             fig = figureMaker3D.createDodecahedron();
         } else if ("Cube" == type) {
             fig = figureMaker3D.createCube();
+        } else if ("FractalCube" == type) {
+            fig = figureMaker3D.createCube();  // Create the initial cube
+            int nr_iterations = configuration[figureKey]["nrIterations"].as_int_or_die();
+            double fractalScale = configuration[figureKey]["fractalScale"].as_double_or_die();
+            // gebruik generateFractal om de fractal te genereren
+            Figures3D fractal;
+            figureMaker3D.generateFractal(fig, fractal, nr_iterations, fractalScale);
+
         } else if ("Icosahedron" == type) {
             fig = figureMaker3D.createIcosahedron();
         } else if ("Sphere" == type) {

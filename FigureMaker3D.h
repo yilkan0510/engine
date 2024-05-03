@@ -29,6 +29,14 @@ public:
 
     Figure divideInTriangles(Figure &fig);
 
+    void generateFractal(Figure& fig, Figures3D& fractal, int nr_iterations, double scale);
+
+    Matrix scaleFigure (double scale);
+
+    Matrix translate(const Vector3D& vector);
+
+    void applyTransformation(Figure& fig, const Matrix& m);
+
 };
 
 
