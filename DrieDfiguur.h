@@ -35,9 +35,6 @@ public:
     std::vector<double> color;
 
     void triangulateFaces();
-
-    Vector3D center() const;
-
 };
 
 typedef std::list<Figure> Figures3D;

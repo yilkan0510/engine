@@ -5,7 +5,7 @@
 #include "FigureMaker3D.h"
 #include "map"
 #include "math.h"
-
+#include "Transformaties.h"
 
 
 Vector3D calculateMidpoint(const Vector3D& start, const Vector3D& end) {
@@ -299,60 +299,65 @@ Figure FigureMaker3D::createDodecahedron() {
 
     return dodecahedron;
 }
+Figure mergeFigures(const Figure& fig1, const Figure& fig2) {
+    Figure mergedFigure = fig1;  // Start with a copy of the first figure
 
-Matrix FigureMaker3D::scaleFigure(double scale) {
-    Matrix m;
-    m(1, 1) = scale;
-    m(2, 2) = scale;
-    m(3, 3) = scale;
-    m(4, 4) = 1; // Zorg ervoor dat de homogene coördinaat correct blijft
-    return m;
-}
+    // Current number of points in mergedFigure, which will be the starting index for the points from fig2
+    int offset = mergedFigure.points.size();
 
-Matrix FigureMaker3D::translate(const Vector3D& vector) {
-    Matrix m;
-    // Set the diagonal to 1 for proper affine transformation
-    m(1, 1) = 1;
-    m(2, 2) = 1;
-    m(3, 3) = 1;
-    m(4, 4) = 1;
+    // Add all points from fig2 to mergedFigure
+    mergedFigure.points.insert(mergedFigure.points.end(), fig2.points.begin(), fig2.points.end());
 
-    // Set translation values at the bottom row, typical for graphics transformations
-    m(4, 1) = vector.x;
-    m(4, 2) = vector.y;
-    m(4, 3) = vector.z;
-
-    return m;
-}
-
-void FigureMaker3D::applyTransformation(Figure& fig, const Matrix& m) {
-    for (Vector3D& point : fig.points) {
-        point = point * m; // Gebruik de overbelaste operator* voor Matrix en Vector3D
+    // Add all faces from fig2, adjusting their indices to reflect their new positions in mergedFigure
+    for (const auto& face : fig2.faces) {
+        std::vector<int> adjustedIndexes;
+        for (int index : face.point_indexes) {
+            adjustedIndexes.push_back(index + offset);  // Adjust index by offset
+        }
+        mergedFigure.faces.push_back(Face(adjustedIndexes));  // Add new face with updated indices to mergedFigure
     }
+
+    return mergedFigure;
 }
 
 
-void FigureMaker3D::generateFractal(Figure& fig, Figures3D& fractal, int nr_iterations, double scale) {
+Figure FigureMaker3D::generateFractal(const Figure& original, int nr_iterations, double scale) {
     if (nr_iterations == 0) {
-        fractal.push_back(fig); // Geen verdere iteraties nodig, voeg de originele figuur toe aan de collectie
-        return;
+        return original;
     }
 
-    for (const Vector3D& point : fig.points) {
-        Figure scaledFig = fig; // Maak een kopie van de originele figuur
+    Transformaties trans;
+    Figure resultFigure = original;  // Start with the original figure for the first iteration
 
-        // Schaal en verplaats de figuur
-        Matrix scalingMatrix = scaleFigure(scale);
-        applyTransformation(scaledFig, scalingMatrix);
+    // On each iteration, create a scaled and translated version of the figure at each vertex
+    for (int i = 0; i < nr_iterations; i++) {
+        Figures3D newFigures; // Temporary container for new figures
 
-        Vector3D translation = point - scaledFig.center(); // Bereken de translatie nodig om het punt te aligneren
-        Matrix translationMatrix = translate(translation);
-        applyTransformation(scaledFig, translationMatrix);
+        for (const Vector3D& point : resultFigure.points) {
+            Figure scaledFigure = resultFigure;  // Make a copy of the result figure to scale and translate
 
-        // Recursieve aanroep
-        generateFractal(scaledFig, fractal, nr_iterations - 1, scale);
+            Matrix scaleMatrix = trans.scaleFigure(scale);
+            trans.applyTransformation(scaledFigure, scaleMatrix);
+
+            // Calculate translation vector to position the scaled figure at the point
+            Vector3D translationVector = point - (scaledFigure.points[0] * scale);
+            Matrix translateMatrix = trans.translate(translationVector);
+            trans.applyTransformation(scaledFigure, translateMatrix);
+
+            // Store the transformed figure
+            newFigures.push_back(scaledFigure);
+        }
+
+        // Merge all new figures into one figure for the next iteration
+        resultFigure = newFigures.front(); // Start with the first figure
+        for (auto it = std::next(newFigures.begin()); it != newFigures.end(); ++it) {
+            resultFigure = mergeFigures(resultFigure, *it);
+        }
     }
+
+    return resultFigure;
 }
+
 
 
 
