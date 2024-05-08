@@ -1,7 +1,7 @@
 CMakeFiles/engine.dir/FigureMaker3D.cpp.obj: \
- C:\Users\yilka\Documents\semester\CG\engine\FigureMaker3D.cpp \
- C:\Users\yilka\Documents\semester\CG\engine\FigureMaker3D.h \
- C:\Users\yilka\Documents\semester\CG\engine\DrieDfiguur.h \
+ C:\Users\yilka\Desktop\engine\FigureMaker3D.cpp \
+ C:\Users\yilka\Desktop\engine\FigureMaker3D.h \
+ C:\Users\yilka\Desktop\engine\DrieDfiguur.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/vector \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/requires_hosted.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \
@@ -99,7 +99,7 @@ CMakeFiles/engine.dir/FigureMaker3D.cpp.obj: \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/allocated_ptr.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ext/aligned_buffer.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/list.tcc \
- C:\Users\yilka\Documents\semester\CG\engine\vector3d.h \
+ C:\Users\yilka\Desktop\engine\vector3d.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iostream \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ostream \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ios \
@@ -157,4 +157,4 @@ CMakeFiles/engine.dir/FigureMaker3D.cpp.obj: \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/math.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cmath \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/x86_64-w64-mingw32/include/math.h \
- C:\Users\yilka\Documents\semester\CG\engine\Transformaties.h
+ C:\Users\yilka\Desktop\engine\Transformaties.h

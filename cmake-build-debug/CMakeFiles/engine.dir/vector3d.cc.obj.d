@@ -1,6 +1,6 @@
 CMakeFiles/engine.dir/vector3d.cc.obj: \
- C:\Users\yilka\Documents\semester\CG\engine\vector3d.cc \
- C:\Users\yilka\Documents\semester\CG\engine\vector3d.h \
+ C:\Users\yilka\Desktop\engine\vector3d.cc \
+ C:\Users\yilka\Desktop\engine\vector3d.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iostream \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/requires_hosted.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \

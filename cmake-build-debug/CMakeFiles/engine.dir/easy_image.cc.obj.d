@@ -1,6 +1,6 @@
 CMakeFiles/engine.dir/easy_image.cc.obj: \
- C:\Users\yilka\Documents\semester\CG\engine\easy_image.cc \
- C:\Users\yilka\Documents\semester\CG\engine\easy_image.h \
+ C:\Users\yilka\Desktop\engine\easy_image.cc \
+ C:\Users\yilka\Desktop\engine\easy_image.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdint.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/x86_64-w64-mingw32/include/stdint.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/x86_64-w64-mingw32/include/crtdefs.h \

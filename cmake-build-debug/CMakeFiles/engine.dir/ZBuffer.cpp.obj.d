@@ -1,6 +1,6 @@
 CMakeFiles/engine.dir/ZBuffer.cpp.obj: \
- C:\Users\yilka\Documents\semester\CG\engine\ZBuffer.cpp \
- C:\Users\yilka\Documents\semester\CG\engine\ZBuffer.h \
+ C:\Users\yilka\Desktop\engine\ZBuffer.cpp \
+ C:\Users\yilka\Desktop\engine\ZBuffer.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/vector \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/requires_hosted.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \

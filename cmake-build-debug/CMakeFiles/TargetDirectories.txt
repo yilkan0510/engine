@@ -1,7 +1,7 @@
-C:/Users/yilka/Documents/semester/CG/engine/cmake-build-debug/CMakeFiles/engine.dir
-C:/Users/yilka/Documents/semester/CG/engine/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/yilka/Documents/semester/CG/engine/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-C:/Users/yilka/Documents/semester/CG/engine/cmake-build-debug/CMakeFiles/list_install_components.dir
-C:/Users/yilka/Documents/semester/CG/engine/cmake-build-debug/CMakeFiles/install.dir
-C:/Users/yilka/Documents/semester/CG/engine/cmake-build-debug/CMakeFiles/install/local.dir
-C:/Users/yilka/Documents/semester/CG/engine/cmake-build-debug/CMakeFiles/install/strip.dir
+C:/Users/yilka/Desktop/engine/cmake-build-debug/CMakeFiles/engine.dir
+C:/Users/yilka/Desktop/engine/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/yilka/Desktop/engine/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/yilka/Desktop/engine/cmake-build-debug/CMakeFiles/list_install_components.dir
+C:/Users/yilka/Desktop/engine/cmake-build-debug/CMakeFiles/install.dir
+C:/Users/yilka/Desktop/engine/cmake-build-debug/CMakeFiles/install/local.dir
+C:/Users/yilka/Desktop/engine/cmake-build-debug/CMakeFiles/install/strip.dir
