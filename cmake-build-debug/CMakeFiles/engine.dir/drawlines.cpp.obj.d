@@ -1,7 +1,7 @@
 CMakeFiles/engine.dir/drawlines.cpp.obj: \
- C:\Users\yilka\Desktop\engine\drawlines.cpp \
- C:\Users\yilka\Desktop\engine\drawlines.h \
- C:\Users\yilka\Desktop\engine\easy_image.h \
+ C:\Users\yilka\Documents\semester\CG\engine\drawlines.cpp \
+ C:\Users\yilka\Documents\semester\CG\engine\drawlines.h \
+ C:\Users\yilka\Documents\semester\CG\engine\easy_image.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdint.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/x86_64-w64-mingw32/include/stdint.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/x86_64-w64-mingw32/include/crtdefs.h \
@@ -143,12 +143,12 @@ CMakeFiles/engine.dir/drawlines.cpp.obj: \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/ostream.tcc \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/istream \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/istream.tcc \
- C:\Users\yilka\Desktop\engine\color-point-line.h \
- C:\Users\yilka\Desktop\engine\ZBuffer.h \
+ C:\Users\yilka\Documents\semester\CG\engine\color-point-line.h \
+ C:\Users\yilka\Documents\semester\CG\engine\ZBuffer.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/limits \
- C:\Users\yilka\Desktop\engine\vector3d.h \
- C:\Users\yilka\Desktop\engine\Perspectiefprojectie.h \
- C:\Users\yilka\Desktop\engine\DrieDfiguur.h \
+ C:\Users\yilka\Documents\semester\CG\engine\vector3d.h \
+ C:\Users\yilka\Documents\semester\CG\engine\Perspectiefprojectie.h \
+ C:\Users\yilka\Documents\semester\CG\engine\DrieDfiguur.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/list \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_list.h \
  C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/allocated_ptr.h \

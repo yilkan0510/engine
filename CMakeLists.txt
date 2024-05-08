@@ -26,8 +26,6 @@ set(engine_sources
         Perspectiefprojectie.cpp
         drawlines.cpp
         FigureMaker3D.cpp
-        LSystem3DGenerator.cpp
-        LSystem3DGenerator.cpp
         ZBuffer.cpp
 )
 

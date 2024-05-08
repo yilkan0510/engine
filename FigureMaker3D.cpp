@@ -327,37 +327,32 @@ Figure FigureMaker3D::generateFractal(const Figure& original, int nr_iterations,
     }
 
     Transformaties trans;
-    Figure resultFigure = original;  // Start with the original figure for the first iteration
+    Figure resultFigure = original;  // Start met het origineel
 
-    // On each iteration, create a scaled and translated version of the figure at each vertex
     for (int i = 0; i < nr_iterations; i++) {
-        Figures3D newFigures; // Temporary container for new figures
+        Figures3D newFigures;
 
-        for (const Vector3D& point : resultFigure.points) {
-            Figure scaledFigure = resultFigure;  // Make a copy of the result figure to scale and translate
+        for (const Vector3D& point : original.points) {
+            Figure scaledFigure = original;  // Kopie van het origineel om te schalen en te verplaatsen
 
             Matrix scaleMatrix = trans.scaleFigure(scale);
             trans.applyTransformation(scaledFigure, scaleMatrix);
 
-            // Calculate translation vector to position the scaled figure at the point
-            Vector3D translationVector = point - (scaledFigure.points[0] * scale);
+            Vector3D translationVector = point - (original.points[0] * scale); // hier is het probleem, hij zegt da moet niet steeds 0 zijn maar moet een variabele zijn
             Matrix translateMatrix = trans.translate(translationVector);
             trans.applyTransformation(scaledFigure, translateMatrix);
 
-            // Store the transformed figure
             newFigures.push_back(scaledFigure);
         }
 
-        // Merge all new figures into one figure for the next iteration
-        resultFigure = newFigures.front(); // Start with the first figure
-        for (auto it = std::next(newFigures.begin()); it != newFigures.end(); ++it) {
-            resultFigure = mergeFigures(resultFigure, *it);
+        resultFigure.points.clear();  // Bereid voor op de nieuwe set van figuren
+        for (const Figure& fig : newFigures) {
+            resultFigure.points.insert(resultFigure.points.end(), fig.points.begin(), fig.points.end());
         }
     }
 
     return resultFigure;
 }
-
 
 
 

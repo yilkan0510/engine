@@ -5,8 +5,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/engine.dir/Eye_point_transformaties.cpp.obj.d"
   "CMakeFiles/engine.dir/FigureMaker3D.cpp.obj"
   "CMakeFiles/engine.dir/FigureMaker3D.cpp.obj.d"
-  "CMakeFiles/engine.dir/LSystem3DGenerator.cpp.obj"
-  "CMakeFiles/engine.dir/LSystem3DGenerator.cpp.obj.d"
   "CMakeFiles/engine.dir/Perspectiefprojectie.cpp.obj"
   "CMakeFiles/engine.dir/Perspectiefprojectie.cpp.obj.d"
   "CMakeFiles/engine.dir/Transformaties.cpp.obj"
