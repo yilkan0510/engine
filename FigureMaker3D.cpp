@@ -327,32 +327,38 @@ Figure FigureMaker3D::generateFractal(const Figure& original, int nr_iterations,
     }
 
     Transformaties trans;
-    Figure resultFigure = original;  // Start met het origineel
+    Figure resultFigure = original;  // Start with the original figure for the first iteration
 
+    // On each iteration, create a scaled and translated version of the figure at each vertex
     for (int i = 0; i < nr_iterations; i++) {
-        Figures3D newFigures;
+        Figures3D newFigures; // Temporary container for new figures
+        int idx = 0;
+        for (const Vector3D& point : resultFigure.points) {
+            Figure scaledFigure = resultFigure;  // Make a copy of the result figure to scale and translate
 
-        for (const Vector3D& point : original.points) {
-            Figure scaledFigure = original;  // Kopie van het origineel om te schalen en te verplaatsen
-
-            Matrix scaleMatrix = trans.scaleFigure(scale);
+            Matrix scaleMatrix = trans.scaleFigure(1/scale);
             trans.applyTransformation(scaledFigure, scaleMatrix);
 
-            Vector3D translationVector = point - (original.points[0] * scale); // hier is het probleem, hij zegt da moet niet steeds 0 zijn maar moet een variabele zijn
+            // Calculate translation vector to position the scaled figure at the point
+            Vector3D translationVector = point - (scaledFigure.points[idx]);
+            idx++;
             Matrix translateMatrix = trans.translate(translationVector);
             trans.applyTransformation(scaledFigure, translateMatrix);
 
+            // Store the transformed figure
             newFigures.push_back(scaledFigure);
         }
 
-        resultFigure.points.clear();  // Bereid voor op de nieuwe set van figuren
-        for (const Figure& fig : newFigures) {
-            resultFigure.points.insert(resultFigure.points.end(), fig.points.begin(), fig.points.end());
+        // Merge all new figures into one figure for the next iteration
+        resultFigure = newFigures.front(); // Start with the first figure
+        for (auto it = std::next(newFigures.begin()); it != newFigures.end(); ++it) {
+            resultFigure = mergeFigures(resultFigure, *it);
         }
     }
 
     return resultFigure;
 }
+
 
 
 

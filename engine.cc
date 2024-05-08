@@ -163,8 +163,8 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
         } else if ("FractalCube" == type) {
             Figure cube = figureMaker3D.createCube();
             int nrIterations = configuration[figureKey]["nrIterations"].as_int_or_die();
-            double scale = configuration[figureKey]["scale"].as_double_or_die();
-            fig = figureMaker3D.generateFractal(cube, nrIterations, scale);
+            double fractalScale = configuration[figureKey]["fractalScale"].as_double_or_die();
+            fig = figureMaker3D.generateFractal(cube, nrIterations, fractalScale);
 
 
         } else if ("Icosahedron" == type) {
