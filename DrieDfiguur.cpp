@@ -30,3 +30,7 @@ void Figure::triangulateFaces() {
     }
     faces = std::move(triangulated); // Vervang de faces door de getrianguleerde faces
 }
+
+void Figure::addTriangle(int a, int b, int c) {
+    faces.push_back(Face({a, b, c}));
+}

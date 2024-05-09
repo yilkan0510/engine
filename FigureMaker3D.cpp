@@ -366,6 +366,39 @@ Figure FigureMaker3D::generateFractal(const Figure& original, int nr_iterations,
     return resultFigure;
 }
 
+Figure FigureMaker3D::createBuckyball() {
+    Figure icosahedron = createIcosahedron();
+    Figure buckyball;
 
+    for (const Face& face : icosahedron.faces) {
+        std::vector<int> pointsIndexes = face.point_indexes;
+        Vector3D p0 = icosahedron.points[pointsIndexes[0]];
+        Vector3D p1 = icosahedron.points[pointsIndexes[1]];
+        Vector3D p2 = icosahedron.points[pointsIndexes[2]];
 
+        // Compute new points (simplified computation here, actual would need exact coordinates)
+        Vector3D p01 = (p0 + p1) / 2;
+        Vector3D p12 = (p1 + p2) / 2;
+        Vector3D p20 = (p2 + p0) / 2;
+        Vector3D centroid = (p0 + p1 + p2) / 3;
 
+        // Add points to buckyball
+        int idx0 = buckyball.points.size(); buckyball.points.push_back(p0);
+        int idx1 = buckyball.points.size(); buckyball.points.push_back(p1);
+        int idx2 = buckyball.points.size(); buckyball.points.push_back(p2);
+        int idx01 = buckyball.points.size(); buckyball.points.push_back(p01);
+        int idx12 = buckyball.points.size(); buckyball.points.push_back(p12);
+        int idx20 = buckyball.points.size(); buckyball.points.push_back(p20);
+        int idxC = buckyball.points.size(); buckyball.points.push_back(centroid);
+
+        // Add faces to buckyball (hexagon and triangles)
+        buckyball.addTriangle(idx0, idx01, idxC);
+        buckyball.addTriangle(idx01, idx1, idxC);
+        buckyball.addTriangle(idx1, idx12, idxC);
+        buckyball.addTriangle(idx12, idx2, idxC);
+        buckyball.addTriangle(idx2, idx20, idxC);
+        buckyball.addTriangle(idx20, idx0, idxC);
+    }
+
+    return buckyball;
+}

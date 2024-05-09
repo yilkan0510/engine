@@ -31,6 +31,7 @@ public:
 
     Figure generateFractal(const Figure& original, int nr_iterations, double scale);
 
+    Figure createBuckyball();
 };
 
 

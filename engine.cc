@@ -154,10 +154,25 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
             fig = BuildFigureFromString(result, l_system);
         } else if ("Tetrahedron" == type) {
             fig = figureMaker3D.createTetrahedron();
+        } else if ("FractalTetrahedron" == type) {
+            Figure tetrahedron = figureMaker3D.createTetrahedron();
+            int nrIterations = configuration[figureKey]["nrIterations"].as_int_or_die();
+            double fractalScale = configuration[figureKey]["fractalScale"].as_double_or_die();
+            fig = figureMaker3D.generateFractal(tetrahedron, nrIterations, fractalScale);
         } else if ("Octahedron" == type) {
             fig = figureMaker3D.createOctahedron();
+        } else if ("FractalOctahedron" == type) {
+            Figure octahedron = figureMaker3D.createOctahedron();
+            int nrIterations = configuration[figureKey]["nrIterations"].as_int_or_die();
+            double fractalScale = configuration[figureKey]["fractalScale"].as_double_or_die();
+            fig = figureMaker3D.generateFractal(octahedron, nrIterations, fractalScale);
         } else if ("Dodecahedron" == type) {
             fig = figureMaker3D.createDodecahedron();
+        } else if ("FractalDodecahedron" == type) {
+            Figure dodecahedron = figureMaker3D.createDodecahedron();
+            int nrIterations = configuration[figureKey]["nrIterations"].as_int_or_die();
+            double fractalScale = configuration[figureKey]["fractalScale"].as_double_or_die();
+            fig = figureMaker3D.generateFractal(dodecahedron, nrIterations, fractalScale);
         } else if ("Cube" == type) {
             fig = figureMaker3D.createCube();
         } else if ("FractalCube" == type) {
@@ -165,10 +180,13 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
             int nrIterations = configuration[figureKey]["nrIterations"].as_int_or_die();
             double fractalScale = configuration[figureKey]["fractalScale"].as_double_or_die();
             fig = figureMaker3D.generateFractal(cube, nrIterations, fractalScale);
-
-
         } else if ("Icosahedron" == type) {
             fig = figureMaker3D.createIcosahedron();
+        } else if ("FractalIcosahedron" == type) {
+            Figure icosahedron = figureMaker3D.createIcosahedron();
+            int nrIterations = configuration[figureKey]["nrIterations"].as_int_or_die();
+            double fractalScale = configuration[figureKey]["fractalScale"].as_double_or_die();
+            fig = figureMaker3D.generateFractal(icosahedron, nrIterations, fractalScale);
         } else if ("Sphere" == type) {
             auto divideAmount = configuration[figureKey]["n"].as_int_or_die();
             fig = figureMaker3D.createSphere(divideAmount);
@@ -186,6 +204,18 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
             auto n = configuration[figureKey]["n"].as_int_or_die();
             auto m = configuration[figureKey]["m"].as_int_or_die();
             fig = figureMaker3D.createTorus(r, R, n, m);
+
+
+            ////TODO
+        } else if ("BuckyBall" == type) {
+            fig = figureMaker3D.createBuckyball();
+        } else if ("FractalBuckyBall" == type) {
+            fig = figureMaker3D.createCube(); //TEMP
+        } else if ("MengerSponge" == type) {
+            fig = figureMaker3D.createCube(); //TEMP
+
+
+
         } else if ("LineDrawing" == type) {
             int nrPoints = configuration[figureKey]["nrPoints"].as_int_or_die();
             for (int j = 0; j < nrPoints; j++) {

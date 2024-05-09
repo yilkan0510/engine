@@ -35,6 +35,8 @@ public:
     std::vector<double> color;
 
     void triangulateFaces();
+
+    void addTriangle(int a, int b, int c);
 };
 
 typedef std::list<Figure> Figures3D;
